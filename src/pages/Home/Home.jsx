@@ -30,12 +30,11 @@ function Home() {
           </div>
 
           <div className="home__visual">
-            <div className="home__image-card">
-              <div className="home__image-placeholder">
-                <span>💎</span>
-                <p>Luxury Jewellery Image</p>
-              </div>
-            </div>
+            <img
+              src="/images/hero-jewellery.png"
+              alt="Ornate gold necklace with rubies and pearls"
+              className="home__hero-image"
+            />
           </div>
         </div>
 
