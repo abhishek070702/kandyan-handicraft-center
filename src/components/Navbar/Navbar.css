@@ -61,6 +61,14 @@
   .navbar__links a:hover {
     color: var(--color-soft-gold);
   }
+
+  .navbar__links a.active {
+    color: var(--color-soft-gold);
+  }
+  
+  .navbar__links a.active::after {
+    width: 100%;
+  }
   
   .navbar__links a::after {
     content: '';
@@ -88,7 +96,12 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
   }
+  
   
   .navbar__button:hover {
     background: var(--color-gold);

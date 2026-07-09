@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom'
 import './Footer.css'
 
 function Footer() {
@@ -5,13 +6,13 @@ function Footer() {
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <a href="/" className="footer__logo">
+          <NavLink to="/" className="footer__logo">
             <span>🐘</span>
             <div>
               <h2>Kandyan</h2>
               <p>Handicraft Center</p>
             </div>
-          </a>
+          </NavLink>
 
           <p className="footer__description">
             Discover timeless handcrafted jewellery inspired by Sri Lanka’s
@@ -21,12 +22,12 @@ function Footer() {
 
         <div className="footer__links">
           <h3>Quick Links</h3>
-          <a href="/">Home</a>
-          <a href="/collections">Collections</a>
-          <a href="/gems">Gems</a>
-          <a href="/gallery">Photo Gallery</a>
-          <a href="/about">About Us</a>
-          <a href="/contact">Contact Us</a>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/collections">Collections</NavLink>
+          <NavLink to="/gems">Gems</NavLink>
+          <NavLink to="/gallery">Photo Gallery</NavLink>
+          <NavLink to="/about">About Us</NavLink>
+          <NavLink to="/contact">Contact Us</NavLink>
         </div>
 
         <div className="footer__contact">
@@ -47,9 +48,15 @@ function Footer() {
           </form>
 
           <div className="footer__socials">
-            <a href="/" aria-label="Facebook">f</a>
-            <a href="/" aria-label="Instagram">◎</a>
-            <a href="/" aria-label="WhatsApp">☏</a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
+              f
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+              ◎
+            </a>
+            <a href="https://wa.me/94771234567" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+              ☏
+            </a>
           </div>
         </div>
       </div>
@@ -57,9 +64,9 @@ function Footer() {
       <div className="container footer__bottom">
         <p>© 2026 Kandyan Handicraft Center. All Rights Reserved.</p>
         <div>
-          <a href="/">Privacy Policy</a>
+          <NavLink to="/">Privacy Policy</NavLink>
           <span>|</span>
-          <a href="/">Terms & Conditions</a>
+          <NavLink to="/">Terms & Conditions</NavLink>
         </div>
       </div>
     </footer>

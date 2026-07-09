@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { collections } from '../../data/collections'
 import './Collections.css'
 
@@ -18,7 +19,7 @@ function Collections() {
       <section className="collections-content">
         <div className="container collections-grid">
           {collections.map((item) => (
-            <a href="/collections" className="collection-card" key={item.id}>
+            <Link to="/collections" className="collection-card" key={item.id}>
               <div className="collection-card__image-wrap">
                 <img src={item.image} alt={item.name} />
               </div>
@@ -28,7 +29,7 @@ function Collections() {
                 <p>{item.description}</p>
                 <span>Explore →</span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </section>

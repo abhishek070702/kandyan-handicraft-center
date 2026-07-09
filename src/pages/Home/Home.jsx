@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { featuredProducts } from '../../data/featuredProducts'
 import './Home.css'
@@ -21,13 +22,13 @@ function Home() {
             </p>
 
             <div className="home__actions">
-              <a href="/collections" className="home__primary-btn">
-                Explore Collection
-              </a>
+            <Link to="/collections" className="home__primary-btn">
+              Explore Collection
+            </Link>
 
-              <a href="/contact" className="home__secondary-btn">
-                Book Custom Order
-              </a>
+            <Link to="/contact" className="home__secondary-btn">
+              Book Custom Order
+            </Link>
             </div>
           </div>
 
@@ -41,47 +42,47 @@ function Home() {
         </div>
 
         <div className="container home__collection-strip">
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>💍</span>
             <h3>Rings</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
 
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>✨</span>
             <h3>Earrings</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
 
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>📿</span>
             <h3>Necklaces</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
 
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>◌</span>
             <h3>Bracelets</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
 
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>◎</span>
             <h3>Bangles</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
 
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>✦</span>
             <h3>Brooches</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
 
-          <a href="/collections" className="home__collection-item">
+          <Link to="/collections" className="home__collection-item">
             <span>◇</span>
             <h3>Waist Chains</h3>
             <p>Explore →</p>
-          </a>
+          </Link>
         </div>
 
         <div className="container home__features">
