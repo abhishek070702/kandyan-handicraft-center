@@ -38,6 +38,50 @@ function Home() {
           </div>
         </div>
 
+        <div className="container home__collection-strip">
+          <a href="/collections" className="home__collection-item">
+            <span>💍</span>
+            <h3>Rings</h3>
+            <p>Explore →</p>
+          </a>
+
+          <a href="/collections" className="home__collection-item">
+            <span>✨</span>
+            <h3>Earrings</h3>
+            <p>Explore →</p>
+          </a>
+
+          <a href="/collections" className="home__collection-item">
+            <span>📿</span>
+            <h3>Necklaces</h3>
+            <p>Explore →</p>
+          </a>
+
+          <a href="/collections" className="home__collection-item">
+            <span>◌</span>
+            <h3>Bracelets</h3>
+            <p>Explore →</p>
+          </a>
+
+          <a href="/collections" className="home__collection-item">
+            <span>◎</span>
+            <h3>Bangles</h3>
+            <p>Explore →</p>
+          </a>
+
+          <a href="/collections" className="home__collection-item">
+            <span>✦</span>
+            <h3>Brooches</h3>
+            <p>Explore →</p>
+          </a>
+
+          <a href="/collections" className="home__collection-item">
+            <span>◇</span>
+            <h3>Waist Chains</h3>
+            <p>Explore →</p>
+          </a>
+        </div>
+
         <div className="container home__features">
           <div className="home__feature">
             <span>✦</span>

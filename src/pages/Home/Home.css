@@ -136,6 +136,60 @@
     saturate(1.08);
 }
 
+.home__collection-strip {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(12px);
+  position: relative;
+  z-index: 3;
+  animation: home-fade-up 1s ease 0.25s both;
+}
+
+.home__collection-item {
+  min-height: 128px;
+  padding: 22px 14px;
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.home__collection-item:last-child {
+  border-right: none;
+}
+
+.home__collection-item span {
+  color: var(--color-gold);
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.home__collection-item h3 {
+  color: var(--color-soft-gold);
+  font-family: var(--font-heading);
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+
+.home__collection-item p {
+  color: var(--color-gold);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.home__collection-item:hover {
+  background: rgba(212, 175, 55, 0.08);
+  transform: translateY(-4px);
+}
+
 .home__features {
   margin-top: 52px;
   display: grid;
@@ -242,6 +296,15 @@
   .home__feature:nth-child(2) {
     border-bottom: 1px solid var(--color-border);
   }
+
+  .home__collection-strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .home__collection-item:nth-child(3),
+  .home__collection-item:nth-child(6) {
+    border-right: none;
+  }
 }
 
 @media (max-width: 560px) {
@@ -277,5 +340,24 @@
 
   .home__feature:last-child {
     border-bottom: none;
+  }
+
+  .home__collection-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .home__collection-item {
+    min-height: 110px;
+  }
+  
+  .home__collection-item:nth-child(3),
+  .home__collection-item:nth-child(6) {
+    border-right: 1px solid var(--color-border);
+  }
+  
+  .home__collection-item:nth-child(2),
+  .home__collection-item:nth-child(4),
+  .home__collection-item:nth-child(6) {
+    border-right: none;
   }
 }
