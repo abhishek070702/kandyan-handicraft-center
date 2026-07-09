@@ -1,21 +1,25 @@
 .app {
-  min-height: 100vh;
-  background: #050505;
-  color: #f3d27a;
+  min-height: calc(100vh - 82px);
+  background:
+    radial-gradient(circle at top right, rgba(212, 175, 55, 0.12), transparent 35%),
+    linear-gradient(135deg, var(--color-black), var(--color-deep-green));
+  color: var(--color-soft-gold);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-family: Georgia, 'Times New Roman', serif;
+  padding: 40px 20px;
 }
 
 .app h1 {
-  font-size: 48px;
-  margin-bottom: 12px;
+  font-size: clamp(38px, 6vw, 68px);
+  margin-bottom: 14px;
+  font-family: var(--font-heading);
+  letter-spacing: 1px;
 }
 
 .app p {
-  color: #c8c2b8;
+  color: var(--color-muted);
   font-size: 18px;
 }

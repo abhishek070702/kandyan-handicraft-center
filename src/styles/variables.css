@@ -1,0 +1,20 @@
+:root {
+    --color-black: #050505;
+    --color-dark: #0b0b0b;
+    --color-deep-green: #031f1c;
+    --color-emerald: #073b35;
+  
+    --color-gold: #d4af37;
+    --color-soft-gold: #f3d27a;
+    --color-light-gold: #ffe8a3;
+  
+    --color-white: #ffffff;
+    --color-muted: #c8c2b8;
+    --color-border: rgba(212, 175, 55, 0.25);
+  
+    --font-heading: Georgia, 'Times New Roman', serif;
+    --font-body: Arial, Helvetica, sans-serif;
+  
+    --container-width: 1200px;
+    --transition: all 0.3s ease;
+  }
