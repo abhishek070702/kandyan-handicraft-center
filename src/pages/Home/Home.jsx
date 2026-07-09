@@ -1,3 +1,5 @@
+import ProductCard from '../../components/ProductCard/ProductCard'
+import { featuredProducts } from '../../data/featuredProducts'
 import './Home.css'
 
 function Home() {
@@ -107,6 +109,18 @@ function Home() {
             <p>Personal jewellery crafted for you.</p>
           </div>
         </div>
+        <div className="container home__featured">
+        <div className="home__section-header">
+          <p>Selected pieces</p>
+          <h2>Featured Collection</h2>
+        </div>
+
+        <div className="home__product-grid">
+          {featuredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
       </section>
     </main>
   )
