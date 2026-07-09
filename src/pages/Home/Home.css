@@ -1,0 +1,97 @@
+.home {
+    background: var(--color-black);
+  }
+  
+  .home__hero {
+    min-height: calc(100vh - 82px);
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.92), rgba(3, 31, 28, 0.78)),
+      radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.18), transparent 30%),
+      linear-gradient(135deg, var(--color-black), var(--color-deep-green));
+    display: flex;
+    align-items: center;
+  }
+  
+  .home__hero-content {
+    max-width: 1200px;
+  }
+  
+  .home__eyebrow {
+    color: var(--color-gold);
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+  
+  .home__hero h1 {
+    color: var(--color-soft-gold);
+    font-family: var(--font-heading);
+    font-size: clamp(46px, 7vw, 82px);
+    line-height: 1.05;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+  
+  .home__description {
+    max-width: 520px;
+    color: var(--color-muted);
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 34px;
+  }
+  
+  .home__actions {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  
+  .home__primary-btn,
+  .home__secondary-btn {
+    padding: 15px 24px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: var(--transition);
+  }
+  
+  .home__primary-btn {
+    background: var(--color-gold);
+    color: var(--color-black);
+  }
+  
+  .home__primary-btn:hover {
+    background: var(--color-soft-gold);
+    transform: translateY(-2px);
+  }
+  
+  .home__secondary-btn {
+    border: 1px solid var(--color-gold);
+    color: var(--color-soft-gold);
+  }
+  
+  .home__secondary-btn:hover {
+    background: var(--color-gold);
+    color: var(--color-black);
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    .home__hero {
+      min-height: calc(100vh - 82px);
+      text-align: center;
+    }
+  
+    .home__description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  
+    .home__actions {
+      justify-content: center;
+    }
+  }

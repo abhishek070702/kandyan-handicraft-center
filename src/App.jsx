@@ -1,15 +1,11 @@
 import Navbar from './components/Navbar/Navbar'
-import './App.css'
+import AppRoutes from './routes/AppRoutes'
 
 function App() {
   return (
     <>
       <Navbar />
-
-      <main className="app">
-        <h1>Kandyan Handicraft Center</h1>
-        <p>Luxury jewellery website coming soon.</p>
-      </main>
+      <AppRoutes />
     </>
   )
 }
