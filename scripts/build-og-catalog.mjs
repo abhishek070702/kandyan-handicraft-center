@@ -7,6 +7,7 @@ import { broochProducts } from '../src/data/products/brooches.js'
 import { braceletProducts } from '../src/data/products/bracelets.js'
 import { pendantProducts } from '../src/data/products/pendants.js'
 import { earringProducts } from '../src/data/products/earrings.js'
+import { waistChainProducts } from '../src/data/products/waistChains.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outFile = join(root, 'public', 'og-catalog.json')
@@ -53,6 +54,13 @@ const categories = [
     description: 'Ornate gold pendants with heritage filigree detail.',
     image: '/images/categories/pendants-card.png',
     products: pendantProducts,
+  },
+  {
+    slug: 'waist-chains',
+    name: 'Waist Chains',
+    description: 'Traditional hawadiya — Sri Lankan waist chains of cultural elegance.',
+    image: '/images/categories/waist-chains-card.png',
+    products: waistChainProducts,
   },
 ]
 

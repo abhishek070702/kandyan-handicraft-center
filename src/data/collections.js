@@ -4,6 +4,7 @@ import { broochProducts } from './products/brooches'
 import { braceletProducts } from './products/bracelets'
 import { pendantProducts } from './products/pendants'
 import { earringProducts } from './products/earrings'
+import { waistChainProducts } from './products/waistChains'
 
 export const categories = [
   {
@@ -67,7 +68,9 @@ export const categories = [
     id: 7,
     slug: 'waist-chains',
     name: 'Waist Chains',
-    description: 'Traditional waist chains for cultural elegance.',
+    description: 'Traditional hawadiya — Sri Lankan waist chains of cultural elegance.',
+    heroDescription:
+      'Handcrafted hawadiya with filigree panels, cascading chains, and heritage detail.',
     image: '/images/categories/waist-chains-showcase.png',
     cardImage: '/images/categories/waist-chains-card.png',
     heroImage: '/images/categories/waist-chains-showcase.png',
@@ -90,6 +93,7 @@ const productsByCategory = {
   bracelets: braceletProducts,
   pendants: pendantProducts,
   earrings: earringProducts,
+  'waist-chains': waistChainProducts,
 }
 
 export function getCategoryBySlug(slug) {
