@@ -5,6 +5,7 @@ import { braceletProducts } from './products/bracelets'
 import { pendantProducts } from './products/pendants'
 import { earringProducts } from './products/earrings'
 import { waistChainProducts } from './products/waistChains'
+import { bangleProducts } from './products/bangles'
 
 export const categories = [
   {
@@ -94,6 +95,7 @@ const productsByCategory = {
   pendants: pendantProducts,
   earrings: earringProducts,
   'waist-chains': waistChainProducts,
+  bangles: bangleProducts,
 }
 
 export function getCategoryBySlug(slug) {

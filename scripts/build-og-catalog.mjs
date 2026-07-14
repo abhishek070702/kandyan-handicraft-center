@@ -8,6 +8,7 @@ import { braceletProducts } from '../src/data/products/bracelets.js'
 import { pendantProducts } from '../src/data/products/pendants.js'
 import { earringProducts } from '../src/data/products/earrings.js'
 import { waistChainProducts } from '../src/data/products/waistChains.js'
+import { bangleProducts } from '../src/data/products/bangles.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outFile = join(root, 'public', 'og-catalog.json')
@@ -61,6 +62,13 @@ const categories = [
     description: 'Traditional hawadiya — Sri Lankan waist chains of cultural elegance.',
     image: '/images/categories/waist-chains-card.png',
     products: waistChainProducts,
+  },
+  {
+    slug: 'bangles',
+    name: 'Bangles',
+    description: 'Classic bangles with refined craftsmanship.',
+    image: '/images/categories/bangles-card.png',
+    products: bangleProducts,
   },
 ]
 
