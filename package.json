@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/build-og-catalog.mjs",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:og": "node scripts/build-og-catalog.mjs"
   },
   "dependencies": {
     "react": "^19.2.7",

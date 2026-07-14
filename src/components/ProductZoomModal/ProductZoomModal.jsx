@@ -133,13 +133,9 @@ function ProductZoomModal({ product, onClose }) {
     ? `/collections/${categorySlug}?product=${product.id}`
     : '/collections'
   const productUrl = `${window.location.origin}${productPath}`
-  const imageUrl = product.image.startsWith('http')
-    ? product.image
-    : `${window.location.origin}${product.image}`
   const enquireText =
     `Hi Kandyan Handicraft Center, I would like to enquire about "${product.name}".\n\n` +
-    `Jewellery photo:\n${imageUrl}\n\n` +
-    `View on website:\n${productUrl}`
+    `${productUrl}`
 
   const openWhatsApp = () => {
     window.open(
@@ -151,27 +147,6 @@ function ProductZoomModal({ product, onClose }) {
 
   const handleEnquire = async (event) => {
     event.preventDefault()
-
-    try {
-      const response = await fetch(imageUrl)
-      const blob = await response.blob()
-      const extension = blob.type.split('/')[1] || 'png'
-      const file = new File([blob], `${product.name}.${extension}`, {
-        type: blob.type || 'image/png',
-      })
-
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: product.name,
-          text: enquireText,
-        })
-        return
-      }
-    } catch {
-      // Fall back to WhatsApp text + image link below.
-    }
-
     openWhatsApp()
   }
 
