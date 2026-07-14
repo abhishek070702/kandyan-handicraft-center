@@ -20,8 +20,12 @@
     margin-bottom: 18px;
   }
   
-  .footer__logo span {
-    font-size: 34px;
+  .footer__logo-image {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
   }
   
   .footer__logo h2 {

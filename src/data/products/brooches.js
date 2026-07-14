@@ -1,0 +1,86 @@
+export const broochProducts = [
+  {
+    id: 1,
+    name: 'Branch Black Stone Saree Pin',
+    description: 'Organic branch-textured gold pin with a polished black oval centre stone.',
+    image: '/images/products/brooches/brooch-01-branch-black-stone.png',
+  },
+  {
+    id: 2,
+    name: 'Hammered Clear Stone Saree Pin',
+    description: 'Hammered gold bar with a floral cluster of clear stones in the centre.',
+    image: '/images/products/brooches/brooch-02-hammered-diamond-cluster.png',
+  },
+  {
+    id: 3,
+    name: 'Red Stone Bar Saree Pin',
+    description: 'Sleek gold bar pin with a round red centre stone in a scalloped setting.',
+    image: '/images/products/brooches/brooch-03-red-stone-bar.png',
+  },
+  {
+    id: 4,
+    name: 'Green Pear Stone Saree Pin',
+    description: 'Polished gold bar with a pear-shaped green centre stone in a bezel mount.',
+    image: '/images/products/brooches/brooch-04-green-pear-stone.png',
+  },
+  {
+    id: 5,
+    name: 'Triple Pearl Bar Saree Pin',
+    description: 'Classic gold bar adorned with three lustrous pearls in a vertical row.',
+    image: '/images/products/brooches/brooch-05-triple-pearl-bar.png',
+  },
+  {
+    id: 6,
+    name: 'Red Faceted Stone Saree Pin',
+    description: 'Ornate gold frame with leaf detailing and a faceted red centre stone.',
+    image: '/images/products/brooches/brooch-06-red-faceted-stone.png',
+  },
+  {
+    id: 7,
+    name: 'Swan Clear Stone Saree Pin',
+    description: 'Elegant swan motif in gold, pavé-set with sparkling clear stones.',
+    image: '/images/products/brooches/brooch-07-swan-diamond.png',
+  },
+  {
+    id: 8,
+    name: 'Black Oval Stone Saree Pin',
+    description: 'Minimal gold bar pin with a smooth black oval cabochon centre stone.',
+    image: '/images/products/brooches/brooch-08-black-oval-stone.png',
+  },
+  {
+    id: 9,
+    name: 'Clear Stone Line Saree Pin',
+    description: 'Slender gold bar lined with a row of round clear stones throughout.',
+    image: '/images/products/brooches/brooch-09-diamond-line-bar.png',
+  },
+  {
+    id: 10,
+    name: 'Coral Rose Saree Pin',
+    description: 'Delicate carved coral rose mounted on a polished gold bar pin.',
+    image: '/images/products/brooches/brooch-10-coral-rose.png',
+  },
+  {
+    id: 11,
+    name: 'Triple Floral Clear Stone Saree Pin',
+    description: 'Three floral clear-stone clusters aligned on a refined gold bar.',
+    image: '/images/products/brooches/brooch-11-triple-floral-diamond.png',
+  },
+  {
+    id: 12,
+    name: 'Green Rectangular Stone Saree Pin',
+    description: 'Gold bar pin featuring an emerald-cut green centre stone in prong setting.',
+    image: '/images/products/brooches/brooch-12-green-emerald-cut.png',
+  },
+  {
+    id: 13,
+    name: 'Filigree Blue Stone Saree Pin',
+    description: 'Intricate gold filigree scrollwork with a blue oval stone and clear accent.',
+    image: '/images/products/brooches/brooch-13-filigree-blue-stone.png',
+  },
+  {
+    id: 14,
+    name: 'Pearl Scroll Clear Stone Saree Pin',
+    description: 'Ornate scroll filigree in gold with pearl edging and clear stone pavé.',
+    image: '/images/products/brooches/brooch-14-pearl-scroll-diamond.png',
+  },
+]

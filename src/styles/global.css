@@ -38,8 +38,21 @@ img {
 }
 
 .container {
-  width: min(100% - 40px, var(--container-width));
+  width: min(100% - 64px, var(--container-width));
   margin: 0 auto;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    width: min(100% - 32px, var(--container-width));
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: min(100% - 24px, var(--container-width));
+  }
 }
 
 .gold-text {
@@ -48,4 +61,57 @@ img {
 
 .section-padding {
   padding: 90px 0;
+}
+
+#root {
+  min-height: 100vh;
+  background: var(--color-black);
+}
+
+.collections-hero,
+.gallery-hero,
+.contact-hero {
+  min-height: 46vh;
+  display: flex;
+  align-items: center;
+}
+
+.gems-hero,
+.about-hero {
+  min-height: 58vh;
+  display: flex;
+  align-items: center;
+}
+
+.collections-content,
+.gallery-content,
+.gems-content,
+.contact-content,
+.about-story,
+.about-process {
+  width: 100%;
+}
+
+@media (min-width: 1400px) {
+  .collections-grid,
+  .gems-grid,
+  .gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .contact-grid,
+  .about-hero__grid,
+  .gems-hero__grid {
+    gap: 72px;
+  }
+}
+
+@media (max-width: 768px) {
+  .collections-hero,
+  .gallery-hero,
+  .contact-hero,
+  .gems-hero,
+  .about-hero {
+    min-height: auto;
+  }
 }

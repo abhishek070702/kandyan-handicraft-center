@@ -7,7 +7,11 @@ function Footer() {
       <div className="container footer__grid">
         <div className="footer__brand">
           <NavLink to="/" className="footer__logo">
-            <span>🐘</span>
+            <img
+              src="/images/logo-elephant.png"
+              alt="Kandyan Handicraft Center"
+              className="footer__logo-image"
+            />
             <div>
               <h2>Kandyan</h2>
               <p>Handicraft Center</p>
@@ -33,7 +37,7 @@ function Footer() {
         <div className="footer__contact">
           <h3>Contact Us</h3>
           <p>No. 123, Kandy Road, Kandy, Sri Lanka</p>
-          <p>+94 77 123 4567</p>
+          <p>+94 77 673 6509</p>
           <p>info@kandyanhandicraft.lk</p>
           <p>Mon - Sat: 9.00 AM - 6.00 PM</p>
         </div>
@@ -54,7 +58,7 @@ function Footer() {
             <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
               ◎
             </a>
-            <a href="https://wa.me/94771234567" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+            <a href="https://wa.me/94779516105" target="_blank" rel="noreferrer" aria-label="WhatsApp">
               ☏
             </a>
           </div>
@@ -62,7 +66,7 @@ function Footer() {
       </div>
 
       <div className="container footer__bottom">
-        <p>© 2026 Kandyan Handicraft Center. All Rights Reserved.</p>
+        <p>© 2026 Eryn Technologies. All Rights Reserved.</p>
         <div>
           <NavLink to="/">Privacy Policy</NavLink>
           <span>|</span>

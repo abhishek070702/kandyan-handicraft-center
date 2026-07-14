@@ -1,8 +1,38 @@
 import './ProductCard.css'
 
-function ProductCard({ product }) {
+const genderLabels = {
+  men: "Men's",
+  women: "Women's",
+}
+
+function ProductCard({ product, onSelect }) {
+  const genderLabel = product.gender ? genderLabels[product.gender] : null
+
+  const handleSelect = () => {
+    if (onSelect) onSelect(product)
+  }
+
+  const handleWishlistClick = (event) => {
+    event.stopPropagation()
+  }
+
   return (
-    <article className="product-card">
+    <article
+      className={`product-card${onSelect ? ' product-card--clickable' : ''}`}
+      onClick={onSelect ? handleSelect : undefined}
+      onKeyDown={
+        onSelect
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                handleSelect()
+              }
+            }
+          : undefined
+      }
+      role={onSelect ? 'button' : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+    >
       <div className="product-card__image-wrap">
         <img
           src={product.image}
@@ -10,14 +40,33 @@ function ProductCard({ product }) {
           className="product-card__image"
         />
 
-        <button className="product-card__wishlist" aria-label="Add to wishlist">
+        {genderLabel && (
+          <span className="product-card__badge">{genderLabel}</span>
+        )}
+
+        <button
+          type="button"
+          className="product-card__wishlist"
+          aria-label="Add to wishlist"
+          onClick={handleWishlistClick}
+        >
           ♡
         </button>
+
+        {onSelect && (
+          <span className="product-card__zoom-hint" aria-hidden="true">
+            Quick View
+          </span>
+        )}
       </div>
 
       <div className="product-card__content">
         <h3>{product.name}</h3>
-        <p>{product.price}</p>
+        <p>
+          {product.price ||
+            product.description ||
+            'Available in store · Enquire for details'}
+        </p>
       </div>
     </article>
   )
