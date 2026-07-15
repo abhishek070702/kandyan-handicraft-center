@@ -181,8 +181,6 @@ function About() {
           <h2>Four chapters of a living craft</h2>
         </div>
 
-        <div className="about-chronicle__spine" aria-hidden="true" />
-
         {eras.map((era, index) => (
           <article
             key={era.year}
