@@ -8,6 +8,8 @@ import GemDetail from '../pages/Gems/GemDetail'
 import Gallery from '../pages/Gallery/Gallery'
 import About from '../pages/About/About'
 import Contact from '../pages/Contact/Contact'
+import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy'
+import TermsConditions from '../pages/TermsConditions/TermsConditions'
 
 function AppRoutes() {
   return (
@@ -22,6 +24,8 @@ function AppRoutes() {
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/terms-and-conditions" element={<TermsConditions />} />
     </Routes>
   )
 }

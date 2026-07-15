@@ -10,7 +10,7 @@ export const galleryImages = [
     id: 1,
     title: 'Where our heritage began',
     category: 'heritage',
-    caption: 'Mr. Danthasinghe Chithra Moolacharige Patabendigē · 1954',
+    caption: 'Mr. Danthasinghe Chithra Moolacharige Patabandi · 1954',
     image: '/images/about/patabendige-heritage.png',
     span: 'tall',
   },

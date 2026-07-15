@@ -70,9 +70,9 @@ function Footer() {
       <div className="container footer__bottom">
         <p>© 2026 Eryn Technologies. All Rights Reserved.</p>
         <div>
-          <NavLink to="/">Privacy Policy</NavLink>
+          <NavLink to="/privacy-policy">Privacy Policy</NavLink>
           <span>|</span>
-          <NavLink to="/">Terms & Conditions</NavLink>
+          <NavLink to="/terms-and-conditions">Terms & Conditions</NavLink>
         </div>
       </div>
     </footer>

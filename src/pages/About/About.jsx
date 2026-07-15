@@ -6,13 +6,13 @@ const eras = [
   {
     year: '1954',
     title: 'Where Our Heritage Began',
-    name: 'Mr. Danthasinghe Chithra Moolacharige Patabendigē',
+    name: 'Mr. Danthasinghe Chithra Moolacharige Patabandi',
     aka: 'A highly talented traditional craftsman',
     image: '/images/about/patabendige-heritage.png',
     imageAlt:
-      'Mr. Danthasinghe Chithra Moolacharige Patabendigē with his gold miniature of the Temple of the Sacred Tooth Relic',
+      'Mr. Danthasinghe Chithra Moolacharige Patabandi with his gold miniature of the Temple of the Sacred Tooth Relic',
     text: [
-      'Our story began with Mr. Danthasinghe Chithra Moolacharige Patabendigē, a highly talented traditional craftsman renowned for creating exceptional artistic works.',
+      'Our story began with Mr. Danthasinghe Chithra Moolacharige Patabandi, a highly talented traditional craftsman renowned for creating exceptional artistic works.',
       'According to our family history, during Queen Elizabeth II’s visit to Sri Lanka in 1954, he presented several special exhibits that showcased the excellence of Sri Lankan traditional craftsmanship and the country’s proud heritage of gold, silver, pearls, and gemstones.',
       'Among his most remarkable creations was a highly detailed miniature model of the Temple of the Sacred Tooth Relic, crafted entirely from gold. This masterpiece reflected his extraordinary creativity, precision, patience, and devotion to Sri Lankan craftsmanship.',
     ],
