@@ -164,10 +164,9 @@ function Contact() {
         <div className="container contact-hero__content">
           <p className="contact-hero__eyebrow">Get in Touch</p>
           <h1>Contact Us</h1>
-          <p>
-            Reach out for jewellery enquiries, custom orders, repairs or
-            appointments. Attach photos of designs or old pieces — no phone
-            number needed.
+          <span className="contact-hero__line" aria-hidden="true" />
+          <p className="contact-hero__lead">
+            Enquiries, custom designs, repairs, and appointments.
           </p>
         </div>
       </section>
@@ -178,10 +177,6 @@ function Contact() {
             <div className="contact-intro">
               <p className="contact-section__eyebrow">Visit Our Store</p>
               <h2>We Would Love to Hear From You</h2>
-              <p className="contact-info__text">
-                Prefer email? Send your message and photos here. We will reply
-                to the email you share. Prefer chat? Use WhatsApp on the right.
-              </p>
             </div>
 
             <div className="contact-form-wrap">
