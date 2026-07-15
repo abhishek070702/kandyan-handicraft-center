@@ -259,7 +259,29 @@ function Home() {
               />
               <div className="home__collection-content">
                 <h3>{category.name}</h3>
-                <p>Explore →</p>
+                <p className="home__collection-cta">
+                  <span>Explore</span>
+                  <span className="home__collection-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 32 32">
+                      <circle
+                        cx="16"
+                        cy="16"
+                        r="14"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                      />
+                      <path
+                        d="M11 16h9.5M16.5 11.5 21.5 16l-5 4.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </p>
               </div>
             </Link>
           ))}

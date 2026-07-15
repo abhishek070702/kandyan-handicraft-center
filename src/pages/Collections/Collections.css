@@ -103,18 +103,59 @@
 .collections-category-card__cta {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: var(--color-gold);
-  font-size: 14px;
+  gap: 12px;
+  color: var(--color-soft-gold);
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.collections-category-card__cta em {
-  font-style: normal;
-  display: inline-block;
-  transition: transform 0.35s ease;
+.collections-category-card__cta-label {
+  position: relative;
+}
+
+.collections-category-card__cta-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0.85),
+    rgba(212, 175, 55, 0.15)
+  );
+  transform: scaleX(0.45);
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.collections-category-card__arrow {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-gold);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.35s ease,
+    filter 0.4s ease;
+}
+
+.collections-category-card__arrow-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+.collections-category-card:hover .collections-category-card__cta-label::after {
+  transform: scaleX(1);
+}
+
+.collections-category-card:hover .collections-category-card__arrow {
+  transform: translateX(5px);
+  color: var(--color-light-gold);
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.35));
 }
 
 .collections-category-card:hover {
@@ -139,10 +180,6 @@
 
 .collections-category-card:hover .collections-category-card__content {
   transform: translateY(0);
-}
-
-.collections-category-card:hover .collections-category-card__cta em {
-  transform: translateX(5px);
 }
 
 @keyframes collectionsCardIn {
@@ -213,7 +250,7 @@
   .collections-category-card,
   .collections-category-card__image img,
   .collections-category-card__content,
-  .collections-category-card__cta em {
+  .collections-category-card__arrow {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;

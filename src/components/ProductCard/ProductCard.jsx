@@ -12,10 +12,6 @@ function ProductCard({ product, onSelect }) {
     if (onSelect) onSelect(product)
   }
 
-  const handleWishlistClick = (event) => {
-    event.stopPropagation()
-  }
-
   return (
     <article
       className={`product-card${onSelect ? ' product-card--clickable' : ''}`}
@@ -43,15 +39,6 @@ function ProductCard({ product, onSelect }) {
         {genderLabel && (
           <span className="product-card__badge">{genderLabel}</span>
         )}
-
-        <button
-          type="button"
-          className="product-card__wishlist"
-          aria-label="Add to wishlist"
-          onClick={handleWishlistClick}
-        >
-          ♡
-        </button>
 
         {onSelect && (
           <span className="product-card__zoom-hint" aria-hidden="true">

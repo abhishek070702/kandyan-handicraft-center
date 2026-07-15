@@ -11,6 +11,12 @@ const filters = [
   { id: 'apala', label: 'Astrology Gems' },
 ]
 
+const categoryLabels = {
+  precious: 'Precious',
+  semi: 'Semi Precious',
+  rare: 'Rare',
+}
+
 function Gems() {
   const [activeFilter, setActiveFilter] = useState('all')
   const [search, setSearch] = useState('')
@@ -123,6 +129,11 @@ function Gems() {
               >
                 <div className="gem-card__image-wrap">
                   <img src={gem.image} alt={gem.name} />
+                  {categoryLabels[gem.category] && (
+                    <span className="gem-card__badge">
+                      {categoryLabels[gem.category]}
+                    </span>
+                  )}
                 </div>
 
                 <div className="gem-card__content">

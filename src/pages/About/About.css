@@ -283,6 +283,20 @@
 
 .about-era--flip .about-era__body {
   order: 3;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.about-era--flip .about-era__body h3,
+.about-era--flip .about-era__chapter,
+.about-era--flip .about-era__aka,
+.about-era--flip .about-era__body p {
+  width: 100%;
+  max-width: 540px;
+  margin-left: auto;
+  text-align: left;
 }
 
 .about-era__year {
@@ -578,22 +592,55 @@
   margin-bottom: 28px;
 }
 
-.about-atelier__link {
-  display: inline-block;
+.about-atelier__link,
+.about-care__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 16px 34px;
+  border: 1px solid rgba(212, 175, 55, 0.7);
+  border-radius: 2px;
+  background:
+    linear-gradient(180deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
   color: var(--color-soft-gold);
   text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 0.24em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.45);
-  padding-bottom: 6px;
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 28px rgba(0, 0, 0, 0.25);
+  transition:
+    color 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
-.about-atelier__link:hover {
-  color: var(--color-light-gold);
-  border-color: var(--color-gold);
-  transform: translateY(-2px);
+.about-atelier__link::after,
+.about-care__link::after {
+  content: '→';
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.35s ease;
+}
+
+.about-atelier__link:hover,
+.about-care__link:hover {
+  color: #111;
+  border-color: transparent;
+  background: linear-gradient(135deg, #e8d08a, #c9a227);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(201, 162, 39, 0.28);
+}
+
+.about-atelier__link:hover::after,
+.about-care__link:hover::after {
+  transform: translateX(4px);
 }
 
 /* ——— Care ——— */
@@ -764,24 +811,6 @@
   font-style: italic;
   line-height: 1.7;
   margin-bottom: 28px;
-}
-
-.about-care__link {
-  display: inline-block;
-  color: var(--color-soft-gold);
-  text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.45);
-  padding-bottom: 6px;
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-}
-
-.about-care__link:hover {
-  color: var(--color-light-gold);
-  border-color: var(--color-gold);
-  transform: translateY(-2px);
 }
 
 /* ——— Close ——— */
@@ -1090,6 +1119,19 @@
   .about-era--flip .about-era__figure,
   .about-era--flip .about-era__body {
     order: initial;
+  }
+
+  .about-era--flip .about-era__body {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .about-era--flip .about-era__body h3,
+  .about-era--flip .about-era__chapter,
+  .about-era--flip .about-era__aka,
+  .about-era--flip .about-era__body p {
+    margin-left: 0;
+    max-width: none;
   }
 
   .about-era__year {

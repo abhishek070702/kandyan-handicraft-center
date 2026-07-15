@@ -129,7 +129,10 @@ function Gallery() {
           <button
             type="button"
             className="gallery-lightbox__close"
-            onClick={close}
+            onClick={(event) => {
+              event.stopPropagation()
+              close()
+            }}
             aria-label="Close"
           >
             ×

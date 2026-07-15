@@ -47,8 +47,27 @@ function Collections() {
               <h2>{category.name}</h2>
               <p>{category.description}</p>
               <span className="collections-category-card__cta">
-                Explore
-                <em aria-hidden="true">→</em>
+                <span className="collections-category-card__cta-label">Explore</span>
+                <span className="collections-category-card__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 32 32" className="collections-category-card__arrow-icon">
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="14"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.4"
+                    />
+                    <path
+                      d="M11 16h9.5M16.5 11.5 21.5 16l-5 4.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
               </span>
             </div>
           </Link>
