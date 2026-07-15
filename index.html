@@ -20,6 +20,22 @@
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
+    <!-- Netlify Forms detection (hidden); React form posts to the same name -->
+    <form
+      name="contact"
+      netlify
+      netlify-honeypot="bot-field"
+      enctype="multipart/form-data"
+      hidden
+    >
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="subject" />
+      <textarea name="message"></textarea>
+      <input type="file" name="photo-1" />
+      <input type="file" name="photo-2" />
+      <input type="file" name="photo-3" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

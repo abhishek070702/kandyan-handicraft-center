@@ -76,8 +76,7 @@ img {
   align-items: center;
 }
 
-.gems-hero,
-.about-hero {
+.gems-hero {
   min-height: 58vh;
   display: flex;
   align-items: center;
@@ -86,9 +85,7 @@ img {
 .collections-content,
 .gallery-content,
 .gems-content,
-.contact-content,
-.about-story,
-.about-process {
+.contact-content {
   width: 100%;
 }
 
@@ -100,7 +97,6 @@ img {
   }
 
   .contact-grid,
-  .about-hero__grid,
   .gems-hero__grid {
     gap: 72px;
   }
@@ -110,8 +106,7 @@ img {
   .collections-hero,
   .gallery-hero,
   .contact-hero,
-  .gems-hero,
-  .about-hero {
+  .gems-hero {
     min-height: auto;
   }
 }

@@ -300,6 +300,125 @@
   );
 }
 
+.contact-form__photos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.contact-form__photos-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.contact-form__photos-hint {
+  color: rgba(200, 194, 184, 0.75);
+  font-size: 12px;
+}
+
+.contact-form__photos-pick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(212, 175, 55, 0.45);
+  border-radius: 10px;
+  color: var(--color-soft-gold);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.contact-form__photos-pick:hover {
+  border-color: rgba(212, 175, 55, 0.75);
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.contact-form__photos-pick input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.contact-form__photos-count {
+  color: rgba(200, 194, 184, 0.8);
+  font-size: 12px;
+}
+
+.contact-form__photo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-form__photo-list li {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.contact-form__photo-list img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.contact-form__photo-list p {
+  color: #e8e1d3;
+  font-size: 13px;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-form__photo-list span {
+  color: rgba(200, 194, 184, 0.7);
+  font-size: 12px;
+}
+
+.contact-form__photo-list button {
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-soft-gold);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.contact-form__photo-list button:hover {
+  border-color: var(--color-gold);
+  background: rgba(212, 175, 55, 0.08);
+  transform: none;
+  box-shadow: none;
+}
+
 .contact-form button {
   padding: 15px 22px;
   border-radius: 6px;
@@ -317,6 +436,22 @@
   box-shadow: 0 16px 36px rgba(212, 175, 55, 0.22);
 }
 
+.contact-form button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
+.contact-form__honey {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .contact-form__success {
   color: var(--color-soft-gold);
   background: rgba(212, 175, 55, 0.08);
@@ -325,6 +460,28 @@
   padding: 13px 14px;
   font-size: 14px;
   text-align: center;
+}
+
+.contact-form__error {
+  color: #f0c9c9;
+  background: rgba(120, 30, 30, 0.28);
+  border: 1px solid rgba(212, 120, 120, 0.35);
+  border-radius: 6px;
+  padding: 13px 14px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.contact-form__error a,
+.contact-info__card a {
+  color: var(--color-soft-gold);
+  text-decoration: none;
+}
+
+.contact-form__error a:hover,
+.contact-info__card a:hover {
+  color: var(--color-light-gold);
+  text-decoration: underline;
 }
 
 .contact-map {

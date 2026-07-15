@@ -38,7 +38,9 @@ function Footer() {
           <h3>Contact Us</h3>
           <p>No. 123, Kandy Road, Kandy, Sri Lanka</p>
           <p>+94 77 673 6509</p>
-          <p>info@kandyanhandicraft.lk</p>
+          <p>
+            <a href="mailto:abhishekchitresena0707@gmail.com">abhishekchitresena0707@gmail.com</a>
+          </p>
           <p>Mon - Sat: 9.00 AM - 6.00 PM</p>
         </div>
 
