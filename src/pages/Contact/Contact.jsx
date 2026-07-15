@@ -3,6 +3,7 @@ import './Contact.css'
 
 /** Test inbox — switch back to jagathitresena@ymail.com when ready */
 const CONTACT_EMAIL = 'abhishekchitresena0707@gmail.com'
+const WHATSAPP_NUMBER = '94779516105'
 const MAX_PHOTOS = 3
 const MAX_PHOTO_MB = 2
 
@@ -153,13 +154,10 @@ function Contact() {
     <main className="contact-page">
       <section className="contact-hero">
         <div className="contact-hero__media" aria-hidden="true">
-          <video
-            className="contact-hero__video"
-            src="/videos/contact-hero.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
+          <img
+            className="contact-hero__image"
+            src="/images/contact/contact-hero.png"
+            alt=""
           />
         </div>
 
@@ -182,7 +180,7 @@ function Contact() {
               <h2>We Would Love to Hear From You</h2>
               <p className="contact-info__text">
                 Prefer email? Send your message and photos here. We will reply
-                to the email you share.
+                to the email you share. Prefer chat? Use WhatsApp on the right.
               </p>
             </div>
 
@@ -344,7 +342,11 @@ function Contact() {
 
             <div className="contact-actions">
               <a href="tel:+94776736509">Call Now</a>
-              <a href="https://wa.me/94779516105" target="_blank" rel="noreferrer">
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 WhatsApp
               </a>
             </div>

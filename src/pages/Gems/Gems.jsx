@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { gems } from '../../data/gems'
 import './Gems.css'
@@ -14,6 +14,7 @@ const filters = [
 function Gems() {
   const [activeFilter, setActiveFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [heroReady, setHeroReady] = useState(false)
 
   const visibleGems = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -31,8 +32,13 @@ function Gems() {
     })
   }, [activeFilter, search])
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setHeroReady(true))
+    return () => window.cancelAnimationFrame(frame)
+  }, [])
+
   return (
-    <main className="gems-page">
+    <main className={`gems-page${heroReady ? ' is-ready' : ''}`}>
       <section className="gems-hero">
         <div className="gems-hero__media" aria-hidden="true">
           <img
@@ -40,10 +46,14 @@ function Gems() {
             alt=""
             className="gems-hero__image"
           />
+          <span className="gems-hero__orb gems-hero__orb--a" />
+          <span className="gems-hero__orb gems-hero__orb--b" />
+          <span className="gems-hero__shine" />
         </div>
 
         <div className="gems-hero__inner">
           <div className="gems-hero__content">
+            <p className="gems-hero__eyebrow">Island Treasures</p>
             <h1>Gems of Sri Lanka</h1>
             <div className="gems-hero__line" aria-hidden="true" />
             <p>
@@ -104,9 +114,13 @@ function Gems() {
             </label>
           </div>
 
-          <div className="gems-grid">
-            {visibleGems.map((gem) => (
-              <article className="gem-card" key={gem.id}>
+          <div key={`${activeFilter}-${search}`} className="gems-grid">
+            {visibleGems.map((gem, index) => (
+              <article
+                className="gem-card"
+                key={gem.id}
+                style={{ '--stagger': `${Math.min(index, 17) * 0.04}s` }}
+              >
                 <div className="gem-card__image-wrap">
                   <img src={gem.image} alt={gem.name} />
                 </div>

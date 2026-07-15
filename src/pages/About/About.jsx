@@ -35,7 +35,7 @@ const eras = [
     name: 'Swarna Hansa',
     aka: 'Opened by Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena · 5th Mile Post, Nugawela',
     image: '/images/about/swarna-hansa.png',
-    imageAlt: 'Swarna Hansa shop at 5th Mile Post, Nugawela',
+    imageAlt: 'Inside Swarna Hansa in Nugawela — crafts, copperware, and guests',
     text: [
       'In 1983, Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena opened another shop named Swarna Hansa at 5th Mile Post, Nugawela.',
       'This was an important step in expanding the family’s craftsmanship and making its creations available to a wider community.',

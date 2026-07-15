@@ -18,6 +18,10 @@ function CollectionCategory() {
   const hasWomenProducts = products.some((product) => product.gender === 'women')
 
   useEffect(() => {
+    setGenderFilter('all')
+  }, [slug])
+
+  useEffect(() => {
     const productId = Number(searchParams.get('product'))
     if (!productId || !products.length) return
 
@@ -129,13 +133,15 @@ function CollectionCategory() {
           )}
 
           {visibleProducts.length > 0 ? (
-            <div className="collection-category-grid">
-              {visibleProducts.map((product) => (
-                <ProductCard
+            <div key={`${slug}-${genderFilter}`} className="collection-category-grid">
+              {visibleProducts.map((product, index) => (
+                <div
                   key={product.id}
-                  product={product}
-                  onSelect={openProduct}
-                />
+                  className="collection-category-grid__item"
+                  style={{ '--stagger': `${Math.min(index, 11) * 0.05}s` }}
+                >
+                  <ProductCard product={product} onSelect={openProduct} />
+                </div>
               ))}
             </div>
           ) : (

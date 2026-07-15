@@ -22,6 +22,7 @@
   width: 100%;
   height: 100%;
   transition: transform 0.85s ease-in-out;
+  will-change: transform;
 }
 
 .home__hero-slides--instant {
@@ -31,11 +32,20 @@
 .home__hero-slide {
   flex: 0 0 100%;
   width: 100%;
+  min-width: 100%;
+  max-width: 100%;
   height: 100%;
   background-color: var(--color-black);
   background-size: cover;
-  background-position: center;
+  background-position: center right;
   background-repeat: no-repeat;
+  transform: scale(1.001);
+  transform-origin: center right;
+  transition: transform 8s ease-out;
+}
+
+.home__hero-slide.is-active {
+  transform: scale(1.06);
 }
 
 .home__hero-overlay {
@@ -53,6 +63,25 @@
   );
 }
 
+.home__hero-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 36%,
+    rgba(212, 175, 55, 0.08) 48%,
+    transparent 60%
+  );
+  background-size: 220% 100%;
+  opacity: 0;
+}
+
+.home__hero.is-ready .home__hero-shine {
+  animation: home-shine 7s ease-in-out 1.2s infinite;
+}
+
 .home__hero-dots {
   position: absolute;
   bottom: 16px;
@@ -64,6 +93,7 @@
   gap: 8px;
   max-width: calc(100% - 32px);
   z-index: 3;
+  opacity: 0;
 }
 
 .home__hero-dot {
@@ -102,7 +132,6 @@
   z-index: 2;
   max-width: min(100%, 560px);
   pointer-events: auto;
-  animation: home-fade-up 0.9s ease both;
 }
 
 .home__eyebrow {
@@ -111,7 +140,20 @@
   letter-spacing: 3px;
   text-transform: uppercase;
   font-weight: 700;
+  margin-bottom: 10px;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.home__eyebrow-rule {
+  display: block;
+  width: 72px;
+  height: 1px;
   margin-bottom: 18px;
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.85), transparent);
+  transform-origin: left center;
+  opacity: 0;
+  transform: scaleX(0.25);
 }
 
 .home__content h1 {
@@ -126,6 +168,8 @@
 .home__hero-line {
   display: block;
   white-space: nowrap;
+  opacity: 0;
+  transform: translateY(22px);
 }
 
 .home__description {
@@ -134,12 +178,44 @@
   font-size: 18px;
   line-height: 1.7;
   margin-bottom: 34px;
+  opacity: 0;
+  transform: translateY(18px);
 }
 
 .home__actions {
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.home__hero.is-ready .home__eyebrow {
+  animation: home-rise 0.85s ease 0.08s both;
+}
+
+.home__hero.is-ready .home__eyebrow-rule {
+  animation: home-rule 0.9s ease 0.2s both;
+}
+
+.home__hero.is-ready .home__hero-line:nth-child(1) {
+  animation: home-rise 0.95s ease 0.28s both;
+}
+
+.home__hero.is-ready .home__hero-line:nth-child(2) {
+  animation: home-rise 0.95s ease 0.4s both;
+}
+
+.home__hero.is-ready .home__description {
+  animation: home-rise 0.9s ease 0.52s both;
+}
+
+.home__hero.is-ready .home__actions {
+  animation: home-rise 0.9s ease 0.64s both;
+}
+
+.home__hero.is-ready .home__hero-dots {
+  animation: home-fade 0.8s ease 0.78s both;
 }
 
 .home__primary-btn,
@@ -186,7 +262,6 @@
   background: transparent;
   position: relative;
   z-index: 3;
-  animation: home-fade-up 1s ease 0.25s both;
 }
 
 .home__collection-item {
@@ -196,7 +271,9 @@
   border-radius: 16px;
   display: block;
   overflow: hidden;
-  transition: var(--transition);
+  transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  opacity: 0;
+  transform: translateY(24px);
 }
 
 .home__collection-item:last-child {
@@ -217,7 +294,7 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.7s ease;
 }
 
 .home__collection-item::after {
@@ -271,18 +348,20 @@
   backdrop-filter: blur(12px);
   position: relative;
   z-index: 3;
-  animation: home-fade-up 1s ease 0.35s both;
 }
 
 .home__feature {
   padding: 28px 24px;
   border-right: 1px solid var(--color-border);
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.35s ease;
   text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .home__feature:hover {
   background: rgba(212, 175, 55, 0.06);
+  transform: translateY(-4px);
 }
 
 .home__feature:last-child {
@@ -296,6 +375,11 @@
   margin: 0 auto 14px;
   display: block;
   filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.15));
+  transition: transform 0.4s ease;
+}
+
+.home__feature:hover .home__feature-icon {
+  transform: translateY(-4px) scale(1.06);
 }
 
 .home__feature h3 {
@@ -317,9 +401,17 @@
   z-index: 3;
 }
 
+.home__product-grid--swap .home__product-reveal {
+  opacity: 0;
+  animation: home-rise 0.7s ease both;
+  animation-delay: var(--stagger, 0s);
+}
+
 .home__section-header {
   text-align: center;
   margin-bottom: 34px;
+  opacity: 0;
+  transform: translateY(18px);
 }
 
 .home__section-header p {
@@ -343,7 +435,29 @@
   gap: 22px;
 }
 
-@keyframes home-fade-up {
+.home__product-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+/* Scroll reveals */
+.home-reveal.is-visible .home__feature,
+.home-reveal.is-visible .home__collection-item,
+.home-reveal.is-visible .home__section-header,
+.home-reveal.is-visible .home__product-reveal {
+  animation: home-rise 0.85s ease both;
+  animation-delay: var(--stagger, 0s);
+}
+
+.home-reveal.is-visible > .home__section-header {
+  animation: home-rise 0.85s ease both;
+}
+
+.home-reveal.is-visible:not(.home__features):not(.home__collection-strip):not(.home__featured) {
+  animation: home-rise 0.9s ease both;
+}
+
+@keyframes home-rise {
   from {
     opacity: 0;
     transform: translateY(22px);
@@ -351,6 +465,66 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes home-rule {
+  from {
+    opacity: 0;
+    transform: scaleX(0.25);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes home-shine {
+  0%,
+  100% {
+    opacity: 0;
+    background-position: 120% 0;
+  }
+  40% {
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0;
+    background-position: -40% 0;
+  }
+}
+
+@keyframes home-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home__hero-slide,
+  .home__hero-shine,
+  .home__eyebrow,
+  .home__eyebrow-rule,
+  .home__hero-line,
+  .home__description,
+  .home__actions,
+  .home__hero-dots,
+  .home__feature,
+  .home__collection-item,
+  .home__section-header,
+  .home__product-reveal,
+  .home-reveal {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .home__hero-slide {
+    transform: none !important;
   }
 }
 

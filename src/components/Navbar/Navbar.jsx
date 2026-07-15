@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import { getCustomOrderWhatsAppUrl } from '../../utils/whatsapp'
 import './Navbar.css'
 
 const navItems = [
@@ -63,9 +64,14 @@ function Navbar() {
             ))}
           </div>
 
-          <NavLink to="/contact" className="navbar__button">
+          <a
+            href={getCustomOrderWhatsAppUrl()}
+            className="navbar__button"
+            target="_blank"
+            rel="noreferrer"
+          >
             Custom Order
-          </NavLink>
+          </a>
         </nav>
       </div>
     </header>

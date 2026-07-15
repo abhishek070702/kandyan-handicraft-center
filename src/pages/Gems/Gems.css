@@ -17,6 +17,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
 .gems-hero__image {
@@ -25,6 +26,67 @@
   object-fit: cover;
   object-position: right center;
   display: block;
+  opacity: 0;
+  transform: scale(1.06);
+}
+
+.gems-page.is-ready .gems-hero__image {
+  animation:
+    gemsHeroImageIn 1s cubic-bezier(0.22, 1, 0.36, 1) both,
+    gemsHeroKenBurns 16s ease-in-out 1s infinite alternate;
+}
+
+.gems-hero__orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+  opacity: 0;
+}
+
+.gems-hero__orb--a {
+  width: min(420px, 65vw);
+  height: min(420px, 65vw);
+  left: 18%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.18), transparent 70%);
+}
+
+.gems-hero__orb--b {
+  width: min(320px, 48vw);
+  height: min(320px, 48vw);
+  right: 8%;
+  bottom: -12%;
+  background: radial-gradient(circle, rgba(7, 59, 53, 0.45), transparent 70%);
+}
+
+.gems-page.is-ready .gems-hero__orb--a {
+  opacity: 1;
+  animation: gemsOrbA 15s ease-in-out 0.35s infinite alternate;
+}
+
+.gems-page.is-ready .gems-hero__orb--b {
+  opacity: 1;
+  animation: gemsOrbB 12s ease-in-out 0.55s infinite alternate;
+}
+
+.gems-hero__shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 36%,
+    rgba(212, 175, 55, 0.1) 48%,
+    transparent 60%
+  );
+  background-size: 220% 100%;
+  opacity: 0;
+}
+
+.gems-page.is-ready .gems-hero__shine {
+  animation: gemsShine 8s ease-in-out 1.3s infinite;
 }
 
 .gems-hero__media::after {
@@ -59,6 +121,40 @@
   transform: translateY(-68px);
 }
 
+.gems-hero__eyebrow,
+.gems-hero h1,
+.gems-hero__line,
+.gems-hero__content > p {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.gems-page.is-ready .gems-hero__eyebrow {
+  animation: gemsRise 0.75s ease 0.08s both;
+}
+
+.gems-page.is-ready .gems-hero h1 {
+  animation: gemsRise 0.85s ease 0.16s both;
+}
+
+.gems-page.is-ready .gems-hero__line {
+  animation: gemsRule 0.9s ease 0.26s both;
+}
+
+.gems-page.is-ready .gems-hero__content > p {
+  animation: gemsRise 0.85s ease 0.36s both;
+}
+
+.gems-hero__eyebrow {
+  color: var(--color-gold);
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
 .gems-hero h1 {
   color: var(--color-soft-gold);
   font-family: var(--font-heading);
@@ -74,6 +170,7 @@
   height: 2px;
   margin-bottom: 20px;
   background: linear-gradient(90deg, var(--color-soft-gold), transparent);
+  transform-origin: left center;
 }
 
 .gems-hero__content p {
@@ -95,6 +192,12 @@
   gap: 16px;
   margin-bottom: 28px;
   flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.gems-page.is-ready .gems-toolbar {
+  animation: gemsRise 0.8s ease 0.42s both;
 }
 
 .gems-filters {
@@ -118,6 +221,7 @@
 .gems-filters__btn:hover {
   border-color: rgba(212, 175, 55, 0.85);
   background: rgba(212, 175, 55, 0.08);
+  transform: translateY(-2px);
 }
 
 .gems-filters__btn.is-active {
@@ -135,6 +239,12 @@
   border: 1px solid rgba(212, 175, 55, 0.45);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gems-search:focus-within {
+  border-color: rgba(212, 175, 55, 0.85);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
 }
 
 .gems-search__icon {
@@ -168,13 +278,20 @@
   border-radius: 12px;
   background: #0a0a0a;
   overflow: hidden;
-  transition: var(--transition);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.4s ease;
   display: flex;
   flex-direction: column;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: gemsRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--stagger, 0s);
 }
 
 .gem-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   border-color: rgba(212, 175, 55, 0.7);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
 }
@@ -187,6 +304,25 @@
   justify-content: center;
   overflow: hidden;
   padding: 16px;
+  position: relative;
+}
+
+.gem-card__image-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(212, 175, 55, 0.12),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.gem-card:hover .gem-card__image-wrap::after {
+  opacity: 1;
 }
 
 .gem-card__image-wrap img {
@@ -195,11 +331,11 @@
   object-fit: contain;
   object-position: center;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .gem-card:hover .gem-card__image-wrap img {
-  transform: scale(1.04);
+  transform: scale(1.08);
 }
 
 .gem-card__content {
@@ -250,6 +386,90 @@
   margin-top: 28px;
   text-align: center;
   color: var(--color-muted);
+  animation: gemsRise 0.6s ease both;
+}
+
+@keyframes gemsRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gemsRule {
+  from {
+    opacity: 0;
+    transform: scaleX(0.25);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes gemsHeroImageIn {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gemsHeroKenBurns {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes gemsOrbA {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    transform: translate(-45%, -55%) scale(1.1);
+  }
+}
+
+@keyframes gemsOrbB {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-14px, -16px);
+  }
+}
+
+@keyframes gemsShine {
+  0%,
+  100% {
+    opacity: 0;
+    background-position: 120% 0;
+  }
+
+  40% {
+    opacity: 0.65;
+  }
+
+  70% {
+    opacity: 0;
+    background-position: -30% 0;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -280,6 +500,11 @@
   .gems-hero__content {
     text-align: left;
     max-width: 100%;
+    transform: translateY(-24px);
+  }
+
+  .gems-hero h1 {
+    white-space: normal;
   }
 
   .gems-grid {
@@ -314,5 +539,21 @@
 @media (max-width: 420px) {
   .gems-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gems-hero__image,
+  .gems-hero__orb,
+  .gems-hero__shine,
+  .gems-hero__eyebrow,
+  .gems-hero h1,
+  .gems-hero__line,
+  .gems-hero__content > p,
+  .gems-toolbar,
+  .gem-card {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -54,16 +54,24 @@ function Gallery() {
 
   return (
     <main className="gallery-page">
-      <section className="gallery-hero">
-        <div className="gallery-hero__glow" aria-hidden="true" />
+      <section className="gallery-hero" aria-label="Photo Gallery">
+        <div className="gallery-hero__atmosphere" aria-hidden="true">
+          <span className="gallery-hero__orb gallery-hero__orb--a" />
+          <span className="gallery-hero__orb gallery-hero__orb--b" />
+          <span className="gallery-hero__spark gallery-hero__spark--1" />
+          <span className="gallery-hero__spark gallery-hero__spark--2" />
+          <span className="gallery-hero__spark gallery-hero__spark--3" />
+          <span className="gallery-hero__grain" />
+        </div>
         <div className="container gallery-hero__inner">
           <div className="gallery-hero__ornament" aria-hidden="true" />
           <p className="gallery-hero__eyebrow">Our Moments</p>
           <h1>Photo Gallery</h1>
           <p className="gallery-hero__lead">
-            Heritage, workshop, and handcrafted jewellery — glimpses of the
-            craft that continues from generation to generation.
+            Heritage moments and guests learning to craft — glimpses of the
+            skill passed from generation to generation.
           </p>
+          <div className="gallery-hero__rule" aria-hidden="true" />
         </div>
       </section>
 

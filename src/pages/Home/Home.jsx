@@ -5,22 +5,69 @@ import ProductZoomModal from '../../components/ProductZoomModal/ProductZoomModal
 import MetalRates from '../../components/MetalRates/MetalRates'
 import { categories, getFeaturedProducts } from '../../data/collections'
 import { heroSlides } from '../../data/heroSlides'
+import { getCustomOrderWhatsAppUrl } from '../../utils/whatsapp'
 import './Home.css'
 
 const HERO_ROTATE_MS = 5000
+const FEATURED_ROTATE_MS = 20000
+const FEATURED_PAGE_SIZE = 4
+
+function useRevealOnScroll() {
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll('.home-reveal'))
+    if (!nodes.length) return undefined
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      nodes.forEach((node) => node.classList.add('is-visible'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          entry.target.classList.add('is-visible')
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.16, rootMargin: '0px 0px -8% 0px' },
+    )
+
+    nodes.forEach((node) => observer.observe(node))
+    return () => observer.disconnect()
+  }, [])
+}
 
 function Home() {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [heroIndex, setHeroIndex] = useState(0)
   const [disableTransition, setDisableTransition] = useState(false)
+  const [heroReady, setHeroReady] = useState(false)
+  const [featuredPage, setFeaturedPage] = useState(0)
   const slideCount = heroSlides.length
   const extendedSlides = useMemo(
     () => (slideCount > 0 ? [...heroSlides, heroSlides[0]] : []),
     [slideCount],
   )
   const activeDot = slideCount > 0 ? heroIndex % slideCount : 0
-  const featuredProducts = useMemo(() => getFeaturedProducts(4), [])
+  const featuredPool = useMemo(() => getFeaturedProducts(24), [])
+  const featuredPageCount = Math.max(
+    1,
+    Math.ceil(featuredPool.length / FEATURED_PAGE_SIZE),
+  )
+  const featuredProducts = useMemo(() => {
+    const start = (featuredPage % featuredPageCount) * FEATURED_PAGE_SIZE
+    return featuredPool.slice(start, start + FEATURED_PAGE_SIZE)
+  }, [featuredPool, featuredPage, featuredPageCount])
   const resetTimeoutRef = useRef(null)
+
+  useRevealOnScroll()
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setHeroReady(true))
+    return () => window.cancelAnimationFrame(frame)
+  }, [])
 
   const resetSlidePosition = useCallback((index) => {
     setDisableTransition(true)
@@ -64,6 +111,16 @@ function Home() {
     return () => window.clearInterval(interval)
   }, [slideCount])
 
+  useEffect(() => {
+    if (featuredPageCount <= 1) return undefined
+
+    const interval = window.setInterval(() => {
+      setFeaturedPage((page) => (page + 1) % featuredPageCount)
+    }, FEATURED_ROTATE_MS)
+
+    return () => window.clearInterval(interval)
+  }, [featuredPageCount])
+
   useEffect(
     () => () => {
       if (resetTimeoutRef.current) {
@@ -75,7 +132,7 @@ function Home() {
 
   return (
     <main className="home">
-      <section className="home__hero">
+      <section className={`home__hero${heroReady ? ' is-ready' : ''}`}>
         <div className="home__hero-banner">
           <div
             className={`home__hero-slides${disableTransition ? ' home__hero-slides--instant' : ''}`}
@@ -86,17 +143,23 @@ function Home() {
             {extendedSlides.map((slide, index) => (
               <div
                 key={`${slide.id}-${index}`}
-                className="home__hero-slide"
+                className={`home__hero-slide${
+                  slideCount > 0 && index % slideCount === activeDot
+                    ? ' is-active'
+                    : ''
+                }`}
                 style={{ backgroundImage: `url(${slide.image})` }}
               />
             ))}
           </div>
 
           <div className="home__hero-overlay" aria-hidden="true" />
+          <div className="home__hero-shine" aria-hidden="true" />
 
           <div className="container home__hero-grid">
             <div className="home__content">
               <p className="home__eyebrow">Heritage. Craft. Elegance.</p>
+              <span className="home__eyebrow-rule" aria-hidden="true" />
 
               <h1>
                 <span className="home__hero-line">Timeless Beauty.</span>
@@ -113,9 +176,14 @@ function Home() {
                   Explore Collection
                 </Link>
 
-                <Link to="/contact" className="home__secondary-btn">
+                <a
+                  href={getCustomOrderWhatsAppUrl()}
+                  className="home__secondary-btn"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Book Custom Order
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -137,93 +205,94 @@ function Home() {
           )}
         </div>
 
-      <div className="container home__features">
-        <div className="home__feature">
-          <img
-            src="/images/features/handcrafted.png"
-            alt=""
-            className="home__feature-icon"
-          />
-          <h3>Handcrafted Excellence</h3>
-          <p>Made with care by skilled artisans.</p>
-        </div>
-
-        <div className="home__feature">
-          <img
-            src="/images/features/premium.png"
-            alt=""
-            className="home__feature-icon"
-          />
-          <h3>Premium Quality Materials</h3>
-          <p>Gold, gems and quality materials.</p>
-        </div>
-
-        <div className="home__feature">
-          <img
-            src="/images/features/heritage.png"
-            alt=""
-            className="home__feature-icon"
-          />
-          <h3>Authentic Sri Lankan Craft</h3>
-          <p>Inspired by traditional craftsmanship.</p>
-        </div>
-
-        <div className="home__feature">
-          <img
-            src="/images/features/custom.png"
-            alt=""
-            className="home__feature-icon"
-          />
-          <h3>Custom Designs Available</h3>
-          <p>Personal jewellery crafted for you.</p>
-        </div>
-      </div>
-
-      <MetalRates />
-
-      <div className="container home__collection-strip">
-        {categories.map((category) => (
-          <Link
-            key={category.slug}
-            to={`/collections/${category.slug}`}
-            className="home__collection-item"
-          >
-            <img
-              src={category.cardImage}
-              alt={category.name}
-              className="home__collection-bg"
-            />
-            <div className="home__collection-content">
-              <h3>{category.name}</h3>
-              <p>Explore →</p>
+        <div className="container home__features home-reveal">
+          {[
+            {
+              icon: '/images/features/handcrafted.png',
+              title: 'Handcrafted Excellence',
+              text: 'Made with care by skilled artisans.',
+            },
+            {
+              icon: '/images/features/premium.png',
+              title: 'Premium Quality Materials',
+              text: 'Gold, gems and quality materials.',
+            },
+            {
+              icon: '/images/features/heritage.png',
+              title: 'Authentic Sri Lankan Craft',
+              text: 'Inspired by traditional craftsmanship.',
+            },
+            {
+              icon: '/images/features/custom.png',
+              title: 'Custom Designs Available',
+              text: 'Personal jewellery crafted for you.',
+            },
+          ].map((feature, index) => (
+            <div
+              key={feature.title}
+              className="home__feature"
+              style={{ '--stagger': `${index * 0.08}s` }}
+            >
+              <img src={feature.icon} alt="" className="home__feature-icon" />
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
             </div>
-          </Link>
-        ))}
-      </div>
-
-      <div className="container home__featured">
-        <div className="home__section-header">
-          <p>Selected pieces</p>
-          <h2>Featured Collection</h2>
-        </div>
-
-        <div className="home__product-grid">
-          {featuredProducts.map((product) => (
-            <ProductCard
-              key={product.featuredId}
-              product={product}
-              onSelect={setSelectedProduct}
-            />
           ))}
         </div>
-      </div>
 
-      {selectedProduct && (
-        <ProductZoomModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
+        <div className="home-reveal">
+          <MetalRates />
+        </div>
+
+        <div className="container home__collection-strip home-reveal">
+          {categories.map((category, index) => (
+            <Link
+              key={category.slug}
+              to={`/collections/${category.slug}`}
+              className="home__collection-item"
+              style={{ '--stagger': `${index * 0.06}s` }}
+            >
+              <img
+                src={category.cardImage}
+                alt={category.name}
+                className="home__collection-bg"
+              />
+              <div className="home__collection-content">
+                <h3>{category.name}</h3>
+                <p>Explore →</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="container home__featured home-reveal">
+          <div className="home__section-header">
+            <p>Selected pieces</p>
+            <h2>Featured Collection</h2>
+          </div>
+
+          <div
+            key={featuredPage}
+            className="home__product-grid home__product-grid--swap"
+          >
+            {featuredProducts.map((product, index) => (
+              <div
+                key={product.featuredId}
+                className="home__product-reveal"
+                style={{ '--stagger': `${index * 0.06}s` }}
+              >
+                <ProductCard product={product} onSelect={setSelectedProduct} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {selectedProduct && (
+          <ProductZoomModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
       </section>
     </main>
   )
