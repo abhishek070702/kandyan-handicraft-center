@@ -104,8 +104,7 @@ function Contact() {
       message: form.message.value.trim(),
     }
 
-    // Photo + message delivery: Netlify Forms (free file uploads).
-    // This only works on the live Netlify site, not localhost.
+    // Delivery uses the live site's mail function, not localhost.
     if (isLocalPreview()) {
       setStatus('error')
       setErrorMessage(
@@ -116,7 +115,7 @@ function Contact() {
 
     try {
       const formData = new FormData()
-      formData.append('form-name', 'contact')
+      formData.append('bot-field', form.elements['bot-field']?.value || '')
       formData.append('name', fields.name)
       formData.append('email', fields.email)
       formData.append('subject', fields.subject)
@@ -126,13 +125,14 @@ function Contact() {
         formData.append(`photo-${index + 1}`, item.file, item.file.name)
       })
 
-      const response = await fetch('/', {
+      const response = await fetch('/.netlify/functions/send-enquiry', {
         method: 'POST',
         body: formData,
       })
+      const payload = await response.json().catch(() => null)
 
-      if (!response.ok) {
-        throw new Error('Unable to send your message.')
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || 'Unable to send your message.')
       }
 
       form.reset()
