@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { COMPANY_PHONES, SHOP_EMAIL, getWhatsAppUrl } from '../../utils/whatsapp'
 import './Contact.css'
 
-/** Test inbox — switch back to jagathitresena@ymail.com when ready */
-const CONTACT_EMAIL = 'abhishekchitresena0707@gmail.com'
-const WHATSAPP_NUMBER = '94779516105'
+const CONTACT_EMAIL = SHOP_EMAIL
 const MAX_PHOTOS = 3
 const MAX_PHOTO_MB = 2
 
@@ -13,9 +12,9 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-function isNetlifyHost() {
+function isLocalPreview() {
   const host = window.location.hostname
-  return host.includes('netlify.app') || host.includes('netlify.com')
+  return host === 'localhost' || host === '127.0.0.1' || host === '::1'
 }
 
 function Contact() {
@@ -107,10 +106,10 @@ function Contact() {
 
     // Photo + message delivery: Netlify Forms (free file uploads).
     // This only works on the live Netlify site, not localhost.
-    if (!isNetlifyHost()) {
+    if (isLocalPreview()) {
       setStatus('error')
       setErrorMessage(
-        'Message + photo send works on the live Netlify website. Deploy the site, then test on kandyan-handicraft-center.netlify.app/contact.',
+        'Messages are delivered from the live website. Please email us or use WhatsApp, and we will reply.',
       )
       return
     }
@@ -200,23 +199,32 @@ function Contact() {
                 />
 
                 <div className="contact-form__row">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name"
-                    required
-                    autoComplete="name"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Your Email"
-                    required
-                    autoComplete="email"
-                  />
+                  <label className="contact-form__field">
+                    <span className="contact-form__message-label">Your Name</span>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your Name"
+                      required
+                      autoComplete="name"
+                    />
+                  </label>
+                  <label className="contact-form__field">
+                    <span className="contact-form__message-label">Your Email</span>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Your Email"
+                      required
+                      autoComplete="email"
+                    />
+                  </label>
                 </div>
 
-                <input type="text" name="subject" placeholder="Subject" required />
+                <label className="contact-form__field">
+                  <span className="contact-form__message-label">Subject</span>
+                  <input type="text" name="subject" placeholder="Subject" required />
+                </label>
 
                 <label className="contact-form__message">
                   <span className="contact-form__message-label">Your Message</span>
@@ -336,7 +344,11 @@ function Contact() {
                 </span>
                 <div>
                   <h3>Phone</h3>
-                  <p>+94 77 673 6509</p>
+                  {COMPANY_PHONES.map((phone) => (
+                    <p key={phone.tel}>
+                      <a href={phone.tel}>{phone.display}</a>
+                    </p>
+                  ))}
                 </div>
               </div>
 
@@ -397,9 +409,9 @@ function Contact() {
             </div>
 
             <div className="contact-actions">
-              <a href="tel:+94776736509">Call Now</a>
+              <a href={COMPANY_PHONES[0].tel}>Call Now</a>
               <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noreferrer"
               >

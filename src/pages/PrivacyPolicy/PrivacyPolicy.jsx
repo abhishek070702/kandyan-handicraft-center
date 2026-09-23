@@ -19,8 +19,8 @@ const sections = [
     body: 'If you call us or tap a WhatsApp button on our website, your communication continues on your phone or in WhatsApp. WhatsApp buttons may open a chat with a short pre-filled message. Any chat on WhatsApp is also covered by WhatsApp’s own privacy practices.',
   },
   {
-    title: 'Newsletter Area',
-    body: 'Our website footer shows a newsletter email field. This feature is not currently active for collecting or storing emails. If it is enabled in future, we will update this Privacy Policy before collecting subscription details.',
+    title: 'Newsletter',
+    body: 'We do not run an email newsletter on this website, and the footer does not collect email addresses. If you want news about new pieces or a custom order, contact us through the Contact Us page or WhatsApp.',
   },
   {
     title: 'Hosting & Technical Data',
@@ -62,7 +62,7 @@ function PrivacyPolicy() {
             A clear record of what we collect — and what we do not.
           </p>
           <span className="privacy-hero__rule" aria-hidden="true" />
-          <p className="privacy-hero__meta">Last updated: July 2026</p>
+          <p className="privacy-hero__meta">Last updated: September 2026</p>
         </div>
       </section>
 

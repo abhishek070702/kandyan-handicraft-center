@@ -61,6 +61,8 @@ function Home() {
     return featuredPool.slice(start, start + FEATURED_PAGE_SIZE)
   }, [featuredPool, featuredPage, featuredPageCount])
   const resetTimeoutRef = useRef(null)
+  const heroPausedRef = useRef(false)
+  const featuredPausedRef = useRef(false)
 
   useRevealOnScroll()
 
@@ -105,6 +107,7 @@ function Home() {
     if (slideCount <= 1) return undefined
 
     const interval = window.setInterval(() => {
+      if (document.hidden || heroPausedRef.current) return
       setHeroIndex((index) => (index >= slideCount ? index : index + 1))
     }, HERO_ROTATE_MS)
 
@@ -115,6 +118,7 @@ function Home() {
     if (featuredPageCount <= 1) return undefined
 
     const interval = window.setInterval(() => {
+      if (document.hidden || featuredPausedRef.current) return
       setFeaturedPage((page) => (page + 1) % featuredPageCount)
     }, FEATURED_ROTATE_MS)
 
@@ -133,7 +137,15 @@ function Home() {
   return (
     <main className="home">
       <section className={`home__hero${heroReady ? ' is-ready' : ''}`}>
-        <div className="home__hero-banner">
+        <div
+          className="home__hero-banner"
+          onMouseEnter={() => {
+            heroPausedRef.current = true
+          }}
+          onMouseLeave={() => {
+            heroPausedRef.current = false
+          }}
+        >
           <div
             className={`home__hero-slides${disableTransition ? ' home__hero-slides--instant' : ''}`}
             style={{ transform: `translateX(-${heroIndex * 100}%)` }}
@@ -208,22 +220,22 @@ function Home() {
         <div className="container home__features home-reveal">
           {[
             {
-              icon: '/images/features/handcrafted.png',
+              icon: '/images/features/handcrafted.jpg',
               title: 'Handcrafted Excellence',
               text: 'Made with care by skilled artisans.',
             },
             {
-              icon: '/images/features/premium.png',
+              icon: '/images/features/premium.jpg',
               title: 'Premium Quality Materials',
               text: 'Gold, gems and quality materials.',
             },
             {
-              icon: '/images/features/heritage.png',
+              icon: '/images/features/heritage.jpg',
               title: 'Authentic Sri Lankan Craft',
               text: 'Inspired by traditional craftsmanship.',
             },
             {
-              icon: '/images/features/custom.png',
+              icon: '/images/features/custom.jpg',
               title: 'Custom Designs Available',
               text: 'Personal jewellery crafted for you.',
             },
@@ -287,7 +299,15 @@ function Home() {
           ))}
         </div>
 
-        <div className="container home__featured home-reveal">
+        <div
+          className="container home__featured home-reveal"
+          onMouseEnter={() => {
+            featuredPausedRef.current = true
+          }}
+          onMouseLeave={() => {
+            featuredPausedRef.current = false
+          }}
+        >
           <div className="home__section-header">
             <p>Selected pieces</p>
             <h2>Featured Collection</h2>

@@ -90,11 +90,13 @@ function Gems() {
             </div>
 
             <label className="gems-search">
+              <span className="visually-hidden">Search gems</span>
               <input
                 type="search"
                 placeholder="Search gem..."
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
+                aria-label="Search gems"
               />
               <svg
                 className="gems-search__icon"
@@ -122,9 +124,10 @@ function Gems() {
 
           <div key={`${activeFilter}-${search}`} className="gems-grid">
             {visibleGems.map((gem, index) => (
-              <article
+              <Link
                 className="gem-card"
                 key={gem.id}
+                to={`/gems/${gem.slug}`}
                 style={{ '--stagger': `${Math.min(index, 17) * 0.04}s` }}
               >
                 <div className="gem-card__image-wrap">
@@ -139,11 +142,9 @@ function Gems() {
                 <div className="gem-card__content">
                   <h2>{gem.name}</h2>
                   <p>{gem.color}</p>
-                  <Link to={`/gems/${gem.slug}`} className="gem-card__btn">
-                    View Details
-                  </Link>
+                  <span className="gem-card__btn">View Details</span>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 

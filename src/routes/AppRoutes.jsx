@@ -10,6 +10,7 @@ import About from '../pages/About/About'
 import Contact from '../pages/Contact/Contact'
 import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy'
 import TermsConditions from '../pages/TermsConditions/TermsConditions'
+import NotFound from '../pages/NotFound/NotFound'
 
 function AppRoutes() {
   return (
@@ -26,6 +27,7 @@ function AppRoutes() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-and-conditions" element={<TermsConditions />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

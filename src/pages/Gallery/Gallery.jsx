@@ -1,10 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { galleryFilters, galleryImages } from '../../data/galleryImages'
 import './Gallery.css'
+
+const categoryLabels = Object.fromEntries(
+  galleryFilters.map((item) => [item.id, item.label]),
+)
 
 function Gallery() {
   const [filter, setFilter] = useState('all')
   const [activeId, setActiveId] = useState(null)
+  const touchStartX = useRef(null)
 
   const items = useMemo(() => {
     if (filter === 'all') return galleryImages
@@ -105,7 +110,9 @@ function Gallery() {
                   <img src={item.image} alt={item.title} loading="lazy" />
                 </span>
                 <span className="gallery-tile__meta">
-                  <span className="gallery-tile__category">{item.category}</span>
+                  <span className="gallery-tile__category">
+                    {categoryLabels[item.category] || item.category}
+                  </span>
                   <span className="gallery-tile__title">{item.title}</span>
                 </span>
               </button>
@@ -125,6 +132,18 @@ function Gallery() {
           aria-modal="true"
           aria-label={activeItem.title}
           onClick={close}
+          onTouchStart={(event) => {
+            touchStartX.current = event.changedTouches[0]?.clientX ?? null
+          }}
+          onTouchEnd={(event) => {
+            if (touchStartX.current == null) return
+            const endX = event.changedTouches[0]?.clientX ?? touchStartX.current
+            const delta = endX - touchStartX.current
+            touchStartX.current = null
+            if (Math.abs(delta) < 48) return
+            if (delta > 0) showPrev()
+            else showNext()
+          }}
         >
           <button
             type="button"
@@ -154,7 +173,7 @@ function Gallery() {
           >
             <img src={activeItem.image} alt={activeItem.title} />
             <figcaption>
-              <p>{activeItem.category}</p>
+              <p>{categoryLabels[activeItem.category] || activeItem.category}</p>
               <h2>{activeItem.title}</h2>
               <p className="gallery-lightbox__caption">{activeItem.caption}</p>
             </figcaption>

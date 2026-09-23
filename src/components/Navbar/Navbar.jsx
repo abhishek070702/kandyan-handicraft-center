@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { getCustomOrderWhatsAppUrl } from '../../utils/whatsapp'
+import { COMPANY_PHONES, getCustomOrderWhatsAppUrl } from '../../utils/whatsapp'
 import './Navbar.css'
 
 const navItems = [
@@ -14,10 +14,13 @@ const navItems = [
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isCallOpen, setIsCallOpen] = useState(false)
+  const callRef = useRef(null)
   const location = useLocation()
 
   useEffect(() => {
     setIsMenuOpen(false)
+    setIsCallOpen(false)
   }, [location.pathname])
 
   useEffect(() => {
@@ -27,6 +30,33 @@ function Navbar() {
       document.body.style.overflow = ''
     }
   }, [isMenuOpen])
+
+  useEffect(() => {
+    if (!isMenuOpen && !isCallOpen) return undefined
+
+    const onKeyDown = (event) => {
+      if (event.key !== 'Escape') return
+      if (isCallOpen) {
+        setIsCallOpen(false)
+        return
+      }
+      setIsMenuOpen(false)
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isMenuOpen, isCallOpen])
+
+  useEffect(() => {
+    if (!isCallOpen) return undefined
+
+    const onPointerDown = (event) => {
+      if (!callRef.current?.contains(event.target)) setIsCallOpen(false)
+    }
+
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [isCallOpen])
 
   return (
     <header className={`navbar ${isMenuOpen ? 'navbar--open' : ''}`}>
@@ -38,7 +68,7 @@ function Navbar() {
             className="navbar__logo-image"
           />
           <div>
-            <h1>Kandyan</h1>
+            <span className="navbar__logo-title">Kandyan</span>
             <p>Handicraft Center</p>
           </div>
         </NavLink>
@@ -62,6 +92,43 @@ function Navbar() {
                 {item.label}
               </NavLink>
             ))}
+          </div>
+
+          <div className="navbar__call" ref={callRef}>
+            <button
+              type="button"
+              className="navbar__call-btn"
+              aria-label="Call the shop"
+              aria-expanded={isCallOpen}
+              onClick={() => setIsCallOpen((open) => !open)}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M7.4 3.8h2.6c.7 0 1.3.5 1.4 1.2l.4 2.2a1.5 1.5 0 0 1-.4 1.3l-1.1 1.2a12.6 12.6 0 0 0 4.2 4.2l1.2-1.1a1.5 1.5 0 0 1 1.3-.4l2.2.4c.7.1 1.2.7 1.2 1.4v2.6c0 .8-.6 1.5-1.4 1.5C10.8 19.8 4.2 13.2 4 5.2c0-.8.6-1.4 1.4-1.4Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div className={`navbar__call-menu${isCallOpen ? ' is-open' : ''}`}>
+              {COMPANY_PHONES.map((phone) => (
+                <a key={phone.tel} href={phone.tel}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M7.4 3.8h2.6c.7 0 1.3.5 1.4 1.2l.4 2.2a1.5 1.5 0 0 1-.4 1.3l-1.1 1.2a12.6 12.6 0 0 0 4.2 4.2l1.2-1.1a1.5 1.5 0 0 1 1.3-.4l2.2.4c.7.1 1.2.7 1.2 1.4v2.6c0 .8-.6 1.5-1.4 1.5C10.8 19.8 4.2 13.2 4 5.2c0-.8.6-1.4 1.4-1.4Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  {phone.display}
+                </a>
+              ))}
+            </div>
           </div>
 
           <a
