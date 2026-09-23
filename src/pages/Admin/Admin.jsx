@@ -58,10 +58,11 @@ function Admin() {
 
   const signIn = async (event) => {
     event.preventDefault()
+    const form = event.currentTarget
     setStatus('sending')
     setErrorMessage('')
     const body = new FormData()
-    body.append('code', event.currentTarget.code.value)
+    body.append('code', form.code.value)
     try {
       const response = await fetch('/.netlify/functions/admin-login', {
         method: 'POST',
@@ -72,7 +73,7 @@ function Admin() {
       if (!response.ok || !payload?.ok) {
         throw new Error(payload?.error || 'Could not sign in.')
       }
-      event.currentTarget.reset()
+      form.reset()
       await loadMessages()
       setStatus('idle')
     } catch (error) {
