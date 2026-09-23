@@ -248,3 +248,63 @@ ${photos ? receiptLine('Photos', photos) : ''}
       .join('\n'),
   }
 }
+
+export function shopReplyMail(data) {
+  const name = escapeHtml(data.name || 'there')
+  const reply = messageHtml(data.reply || '')
+  const logo = `${siteOrigin()}/images/logo-elephant.png`
+  const collections = `${siteOrigin()}/collections`
+  const preview = String(data.reply || '').replace(/\s+/g, ' ').trim()
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<body style="margin:0;padding:0;background-color:#f5f1e8;font-family:Arial,Helvetica,sans-serif;">
+${previewBlock(preview)}
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f1e8;padding:30px 10px;">
+<tr><td align="center">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;">
+<tr>
+<td align="center" style="background:#0b0b0b;padding:35px 20px;border-bottom:3px solid #d4af37;">
+<img src="${logo}" alt="" width="95" height="95" style="display:block;margin:auto;border:0;width:95px;height:95px;" />
+<h1 style="color:#d4af37;margin:18px 0 5px;font-size:26px;font-family:Georgia,serif;font-weight:500;letter-spacing:1px;">Kandyan Handicraft Center</h1>
+<p style="color:#d9d9d9;margin:0;font-size:13px;letter-spacing:2px;">CRAFTED THROUGH GENERATIONS</p>
+</td>
+</tr>
+<tr>
+<td style="padding:38px 35px;">
+<p style="margin:0 0 16px;color:#333333;font-size:16px;">Hello <strong>${name}</strong>,</p>
+<h2 style="color:#1b1b1b;font-family:Georgia,serif;font-size:25px;margin:0 0 15px;">A Reply From Our Workshop</h2>
+<p style="color:#666666;font-size:15px;line-height:1.7;margin:0 0 25px;">Thank you for contacting Kandyan Handicraft Center. Here is our reply.</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#faf7ef;border:1px solid #eadfbf;border-radius:10px;margin-bottom:30px;">
+<tr><td style="padding:22px;">
+<p style="margin:0 0 15px;color:#b58a24;font-size:12px;font-weight:bold;letter-spacing:2px;">OUR REPLY</p>
+<p style="margin:0;color:#333333;font-size:15px;line-height:1.7;">${reply}</p>
+</td></tr>
+</table>
+<table cellpadding="0" cellspacing="0" align="center">
+<tr><td align="center" style="background:#d4af37;border-radius:6px;">
+<a href="${collections}" style="display:inline-block;padding:14px 28px;color:#111111;text-decoration:none;font-size:14px;font-weight:bold;letter-spacing:1px;">VIEW OUR COLLECTIONS</a>
+</td></tr>
+</table>
+<p style="text-align:center;color:#777777;margin:35px 0 0;font-size:14px;">Need anything else? Reply to this email and we will be happy to help.</p>
+</td>
+</tr>
+<tr>
+<td align="center" style="background:#111111;padding:30px 20px;">
+<p style="color:#d4af37;margin:0 0 8px;font-family:Georgia,serif;font-size:16px;">Crafted through generations.</p>
+<p style="color:#d4af37;margin:0 0 20px;font-family:Georgia,serif;font-size:16px;">Created especially for you.</p>
+<p style="color:#aaaaaa;font-size:12px;line-height:1.7;margin:0;">Kandyan Handicraft Center<br />${escapeHtml('Castle Lane, Bogambara, Kandy, Sri Lanka')}<br />Gold • Silver • Gems • Traditional Jewellery</p>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`
+
+  return {
+    subject: 'A reply from Kandyan Handicraft Center',
+    html,
+    text: [`Hello ${data.name || ''},`, '', data.reply || '', '', collections].join('\n'),
+  }
+}
