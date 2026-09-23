@@ -42,11 +42,16 @@ async function photoAttachments(form) {
 }
 
 function safeFilename(name, field, type) {
-  const fromName = String(name || '').match(/\.([a-z0-9]{2,5})$/i)?.[1]?.toLowerCase()
+  const cleaned = String(name || '')
+    .replace(/[^\w.\- ]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+  if (cleaned && /\.(jpe?g|png|webp|gif|heic)$/i.test(cleaned)) return cleaned
+
   const fromType =
     type === 'image/png' ? 'png' : type === 'image/webp' ? 'webp' : type === 'image/gif' ? 'gif' : 'jpg'
-  const ext = fromName && /^(jpe?g|png|webp|gif|heic)$/.test(fromName) ? fromName : fromType
-  return `${field}.${ext === 'jpeg' ? 'jpg' : ext}`
+  return `${field}.${fromType}`
 }
 
 function createTransport(user, pass, port) {

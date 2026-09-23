@@ -23,12 +23,20 @@ function phoneLine() {
   return COMPANY_PHONES.map((phone) => phone.display).join('  ·  ')
 }
 
-function shell({ eyebrow, title, intro, inner }) {
+function previewBlock(preview) {
+  const text = escapeHtml(String(preview || '').replace(/\s+/g, ' ').trim())
+  if (!text) return ''
+  const pad = '&nbsp;&zwnj;'.repeat(90)
+  return `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${text}${pad}</div>`
+}
+
+function shell({ eyebrow, title, intro, inner, preview }) {
   const logo = `${siteOrigin()}/images/logo-elephant.png`
 
   return `<!DOCTYPE html>
 <html lang="en">
   <body style="margin:0;padding:0;background:${PAGE};">
+    ${previewBlock(preview)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${PAGE};padding:28px 12px;">
       <tr>
         <td align="center">
@@ -38,7 +46,7 @@ function shell({ eyebrow, title, intro, inner }) {
             </tr>
             <tr>
               <td align="center" style="padding:32px 28px 8px;">
-                <img src="${logo}" width="64" height="64" alt="Kandyan Handicraft Center" style="display:block;border:0;width:64px;height:64px;" />
+                <img src="${logo}" width="64" height="64" alt="" style="display:block;border:0;width:64px;height:64px;" />
               </td>
             </tr>
             <tr>
@@ -147,10 +155,12 @@ export function shopEnquiryMail(data) {
     ? `<a href="mailto:${escapeHtml(data.email)}" style="color:${SOFT};text-decoration:none;">${email}</a>`
     : email
 
+  const messagePreview = String(data.message || '').replace(/\s+/g, ' ').trim()
   const html = shell({
     eyebrow: 'New enquiry',
     title: 'A new jewellery enquiry',
     intro: 'A new message has arrived from the website. Reply to this email to answer them directly.',
+    preview: messagePreview || `${data.name || 'A customer'} sent an enquiry.`,
     inner: detailTable(
       detailRow('Name', name) +
         detailRow('Email', emailLink) +
@@ -161,13 +171,11 @@ export function shopEnquiryMail(data) {
   })
 
   const text = [
-    'New enquiry — Kandyan Handicraft Center',
+    messagePreview || `${data.name || 'A customer'} sent an enquiry.`,
     '',
     `Name: ${data.name || ''}`,
     `Email: ${data.email || ''}`,
     `Subject: ${data.subject || ''}`,
-    '',
-    data.message || '',
     data.photoCount ? `Photos attached: ${data.photoCount}` : '',
   ].filter((line) => line !== '').join('\n')
 
@@ -187,13 +195,14 @@ export function customerReceiptMail(data) {
     eyebrow: 'Message received',
     title: `Thank you, ${name}`,
     intro: 'Your note has reached Kandyan Handicraft Center. We will reply to this email.',
+    preview: `We received your message about ${data.subject || 'your enquiry'} and will reply to this email.`,
     inner: detailTable(detailRow('Subject', subject) + detailRow('Your message', message)),
   })
 
   const text = [
-    `Thank you, ${data.name || ''}`,
+    `We received your message about ${data.subject || 'your enquiry'} and will reply to this email.`,
     '',
-    'Your message has reached Kandyan Handicraft Center. We will reply to this email.',
+    `Thank you, ${data.name || ''}`,
     '',
     `Subject: ${data.subject || ''}`,
     '',
