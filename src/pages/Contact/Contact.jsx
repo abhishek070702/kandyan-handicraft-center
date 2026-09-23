@@ -283,7 +283,7 @@ function Contact() {
                   )}
                 </div>
 
-                <button type="submit" disabled={status === 'sending'}>
+                <button className="contact-form__submit" type="submit" disabled={status === 'sending'}>
                   {status === 'sending' ? 'Sending…' : 'Send Message'}
                 </button>
 

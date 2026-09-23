@@ -12,8 +12,8 @@
     --color-muted: #c8c2b8;
     --color-border: rgba(212, 175, 55, 0.25);
   
-    --font-heading: Georgia, 'Times New Roman', serif;
-    --font-body: Arial, Helvetica, sans-serif;
+    --font-heading: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --font-body: Outfit, "Segoe UI", sans-serif;
   
     --container-width: 1360px;
     --transition: all 0.3s ease;

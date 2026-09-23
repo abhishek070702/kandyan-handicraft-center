@@ -226,7 +226,7 @@
 
 .contact-actions a {
   padding: 14px 20px;
-  border-radius: 5px;
+  border-radius: 999px;
   border: 1px solid var(--color-gold);
   color: var(--color-soft-gold);
   font-size: 13px;
@@ -478,9 +478,9 @@
   box-shadow: none;
 }
 
-.contact-form button {
+.contact-form__submit {
   padding: 15px 22px;
-  border-radius: 6px;
+  border-radius: 999px;
   background: linear-gradient(135deg, var(--color-soft-gold), var(--color-gold));
   color: var(--color-black);
   font-size: 13px;
@@ -490,12 +490,12 @@
   transition: var(--transition);
 }
 
-.contact-form button:hover {
+.contact-form__submit:hover {
   transform: translateY(-3px);
   box-shadow: 0 16px 36px rgba(212, 175, 55, 0.22);
 }
 
-.contact-form button:disabled {
+.contact-form__submit:disabled {
   opacity: 0.65;
   cursor: wait;
   transform: none;
