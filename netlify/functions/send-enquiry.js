@@ -90,14 +90,22 @@ async function sendOne(user, pass, message) {
   throw lastError
 }
 
-function shopText(fields) {
-  return [
-    `Name: ${fields.name}`,
-    `Email: ${fields.email}`,
-    `Subject: ${fields.subject}`,
-    '',
-    fields.message,
-  ].join('\n')
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function shopMail(fields) {
+  const message = escapeHtml(fields.message).replace(/\n/g, '<br />')
+  const text = [fields.message, '', fields.name, fields.email].join('\n')
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:#222222;font-size:16px;line-height:1.7;">
+<p style="margin:0;">${message}</p>
+<p style="margin:28px 0 0;color:#666666;font-size:13px;line-height:1.6;">${escapeHtml(fields.name)}<br />${escapeHtml(fields.email)}</p>
+</div>`
+  return { text, html }
 }
 
 export default async function sendEnquiry(request) {
@@ -148,7 +156,7 @@ export default async function sendEnquiry(request) {
   }
 
   const senderName = fields.name.replace(/[\r\n"]/g, '').slice(0, 80)
-  const text = shopText(fields)
+  const mail = shopMail(fields)
 
   try {
     await sendOne(user, pass, {
@@ -156,7 +164,8 @@ export default async function sendEnquiry(request) {
       to: SHOP_EMAIL,
       replyTo: senderName ? `"${senderName}" <${fields.email}>` : fields.email,
       subject: fields.subject,
-      text,
+      text: mail.text,
+      html: mail.html,
       attachments,
     })
   } catch (error) {
