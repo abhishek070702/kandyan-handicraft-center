@@ -32,13 +32,58 @@ async function photoAttachments(form) {
     }
 
     files.push({
-      filename: value.name || `${field}.jpg`,
+      filename: safeFilename(value.name, field, value.type),
       content: Buffer.from(await value.arrayBuffer()),
       contentType: value.type || 'application/octet-stream',
     })
   }
 
   return files
+}
+
+function safeFilename(name, field, type) {
+  const fromName = String(name || '').match(/\.([a-z0-9]{2,5})$/i)?.[1]?.toLowerCase()
+  const fromType =
+    type === 'image/png' ? 'png' : type === 'image/webp' ? 'webp' : type === 'image/gif' ? 'gif' : 'jpg'
+  const ext = fromName && /^(jpe?g|png|webp|gif|heic)$/.test(fromName) ? fromName : fromType
+  return `${field}.${ext === 'jpeg' ? 'jpg' : ext}`
+}
+
+function createTransport(user, pass, port) {
+  const secure = port === 465
+  return nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port,
+    secure,
+    requireTLS: !secure,
+    auth: { user, pass },
+    connectionTimeout: secure ? 12000 : 8000,
+    greetingTimeout: 12000,
+    socketTimeout: 20000,
+  })
+}
+
+async function sendOne(user, pass, message) {
+  let lastError
+
+  for (const port of [465, 587]) {
+    const transporter = createTransport(user, pass, port)
+    try {
+      await transporter.sendMail(message)
+      transporter.close()
+      return
+    } catch (error) {
+      lastError = error
+      transporter.close()
+      const code = error && error.code
+      if (code !== 'ETIMEDOUT' && code !== 'ECONNECTION' && code !== 'ESOCKET' && code !== 'ECONNRESET') {
+        throw error
+      }
+      console.error(`Enquiry mail connection failed on port ${port}`, code)
+    }
+  }
+
+  throw lastError
 }
 
 export default async function sendEnquiry(request) {
@@ -88,21 +133,14 @@ export default async function sendEnquiry(request) {
     )
   }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: { user, pass },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 20000,
-  })
   const shopMail = shopEnquiryMail({ ...fields, photoCount: attachments.length })
   const fromShop = `Kandyan Handicraft Center <${user}>`
   const senderName = fields.name.replace(/[\r\n"]/g, '').slice(0, 80)
 
+  const receipt = customerReceiptMail(fields)
+
   try {
-    await transporter.sendMail({
+    await sendOne(user, pass, {
       from: senderName ? `"${senderName}" <${user}>` : fromShop,
       to: SHOP_EMAIL,
       replyTo: fields.email,
@@ -111,16 +149,18 @@ export default async function sendEnquiry(request) {
       text: shopMail.text,
       attachments,
     })
-
-    const receipt = customerReceiptMail(fields)
-    await transporter.sendMail({
-      from: fromShop,
-      to: fields.email,
-      replyTo: SHOP_EMAIL,
-      subject: receipt.subject,
-      html: receipt.html,
-      text: receipt.text,
-    })
+    try {
+      await sendOne(user, pass, {
+        from: fromShop,
+        to: fields.email,
+        replyTo: SHOP_EMAIL,
+        subject: receipt.subject,
+        html: receipt.html,
+        text: receipt.text,
+      })
+    } catch (error) {
+      console.error('Customer receipt failed after the shop email was sent', error)
+    }
   } catch (error) {
     console.error('Enquiry mail failed', error)
     return json(
