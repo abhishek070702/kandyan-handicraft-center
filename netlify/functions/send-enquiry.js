@@ -120,7 +120,11 @@ export default async function sendEnquiry(request) {
   const fields = {
     name: String(form.get('name') || '').trim(),
     email: String(form.get('email') || '').trim(),
+    phone: String(form.get('phone') || '').trim(),
     subject: String(form.get('subject') || '').trim(),
+    product: String(form.get('product') || '').trim(),
+    material: String(form.get('material') || '').trim(),
+    category: String(form.get('category') || '').trim(),
     message: String(form.get('message') || '').trim(),
   }
 
@@ -142,7 +146,7 @@ export default async function sendEnquiry(request) {
   const fromShop = `Kandyan Handicraft Center <${user}>`
   const senderName = fields.name.replace(/[\r\n"]/g, '').slice(0, 80)
 
-  const receipt = customerReceiptMail(fields)
+  const receipt = customerReceiptMail({ ...fields, photoCount: attachments.length })
 
   try {
     await sendOne(user, pass, {

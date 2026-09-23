@@ -100,7 +100,11 @@ function Contact() {
     const fields = {
       name: form.name.value.trim(),
       email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
       subject: form.subject.value.trim(),
+      product: form.product.value.trim(),
+      material: form.material.value.trim(),
+      category: form.category.value.trim(),
       message: form.message.value.trim(),
     }
 
@@ -119,7 +123,11 @@ function Contact() {
       formData.append('bot-field', form.elements['bot-field']?.value || '')
       formData.append('name', fields.name)
       formData.append('email', fields.email)
+      formData.append('phone', fields.phone)
       formData.append('subject', fields.subject)
+      formData.append('product', fields.product)
+      formData.append('material', fields.material)
+      formData.append('category', fields.category)
       formData.append('message', fields.message)
 
       photos.forEach((item, index) => {
@@ -222,8 +230,40 @@ function Contact() {
                 </div>
 
                 <label className="contact-form__field">
+                  <span className="contact-form__message-label">Phone / WhatsApp</span>
+                  <input type="tel" name="phone" placeholder="Phone / WhatsApp" autoComplete="tel" />
+                </label>
+
+                <label className="contact-form__field">
                   <span className="contact-form__message-label">Subject</span>
                   <input type="text" name="subject" placeholder="Subject" required />
+                </label>
+
+                <div className="contact-form__row">
+                  <label className="contact-form__field">
+                    <span className="contact-form__message-label">Product</span>
+                    <input type="text" name="product" placeholder="Product" />
+                  </label>
+                  <label className="contact-form__field">
+                    <span className="contact-form__message-label">Material</span>
+                    <input type="text" name="material" placeholder="Gold, silver, gems" />
+                  </label>
+                </div>
+
+                <label className="contact-form__field">
+                  <span className="contact-form__message-label">Category</span>
+                  <select name="category" defaultValue="">
+                    <option value="">Category</option>
+                    <option>Rings</option>
+                    <option>Earrings</option>
+                    <option>Necklaces</option>
+                    <option>Bracelets</option>
+                    <option>Bangles</option>
+                    <option>Brooches</option>
+                    <option>Waist Chains</option>
+                    <option>Pendants</option>
+                    <option>Gems</option>
+                  </select>
                 </label>
 
                 <label className="contact-form__message">

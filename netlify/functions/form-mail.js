@@ -11,7 +11,11 @@ function readFields(event) {
   return {
     name: String(data.name || '').trim(),
     email: String(data.email || '').trim(),
+    phone: String(data.phone || '').trim(),
     subject: String(data.subject || '').trim(),
+    product: String(data.product || '').trim(),
+    material: String(data.material || '').trim(),
+    category: String(data.category || '').trim(),
     message: String(data.message || '').trim(),
     'photo-1': data['photo-1'],
     'photo-2': data['photo-2'],
