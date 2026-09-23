@@ -7,8 +7,8 @@ const sections = [
     body: 'Yes — but only when you choose to contact us. Simply browsing our website does not require you to give personal details. We do not run advertising trackers or analytics tools on this website at present.',
   },
   {
-    title: 'Contact Form',
-    body: 'If you send a message through our Contact Us page, we collect the details you enter: your name, email address, subject, and message. You may also optionally attach up to three photos (for example a design idea, sample, or old jewellery piece). These submissions are received through Netlify Forms so we can review your enquiry and reply to the email address you provide.',
+    title: 'How You Can Reach Us',
+    body: 'Our Contact Us page shows our address, phone numbers, email address, and WhatsApp link. If you email, call, or message us, we use the details you choose to share only to reply to that enquiry.',
   },
   {
     title: 'How We Use This Information',
@@ -24,7 +24,7 @@ const sections = [
   },
   {
     title: 'Hosting & Technical Data',
-    body: 'Our website is hosted on Netlify. When you submit the contact form, Netlify processes that submission so we can receive it. Like most websites, normal hosting or network logs may exist for security and reliability. This is not used to build marketing profiles.',
+    body: 'Our website is hosted on Netlify. Like most websites, normal hosting or network logs may exist for security and reliability. This is not used to build marketing profiles.',
   },
   {
     title: 'Cookies & Browser Storage',
@@ -32,11 +32,11 @@ const sections = [
   },
   {
     title: 'Sharing Your Information',
-    body: 'We do not sell or rent your personal information. We only share information when needed to respond to your request (for example through our form hosting provider), to comply with the law, or to protect our business.',
+    body: 'We do not sell or rent your personal information. We only share information when needed to respond to your request, to comply with the law, or to protect our business.',
   },
   {
     title: 'Keeping Information Safe',
-    body: 'We take reasonable care with the information you send us. No online method is perfectly secure, so please avoid sending unnecessary sensitive details in forms or chats.',
+    body: 'We take reasonable care with the information you send us. No online method is perfectly secure, so please avoid sending unnecessary sensitive details in emails or chats.',
   },
   {
     title: 'Your Requests',
@@ -72,7 +72,7 @@ function PrivacyPolicy() {
             <p>
               Kandyan Handicraft Center respects your privacy. This policy
               describes our real website practices today: how information is
-              collected through contact forms, WhatsApp, and phone — and how we
+              collected when you email, WhatsApp, or call us — and how we
               use it only to serve your jewellery enquiry.
             </p>
           </article>
