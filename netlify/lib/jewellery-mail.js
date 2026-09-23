@@ -110,6 +110,12 @@ function messageHtml(message) {
 }
 
 function photoLinks(data) {
+  const count = Number(data.photoCount) || 0
+  if (count > 0) {
+    const label = count === 1 ? '1 photo is attached' : `${count} photos are attached`
+    return detailRow('Photos', label)
+  }
+
   const links = [1, 2, 3]
     .map((index) => data[`photo-${index}`])
     .map((photo) => {
@@ -162,7 +168,8 @@ export function shopEnquiryMail(data) {
     `Subject: ${data.subject || ''}`,
     '',
     data.message || '',
-  ].join('\n')
+    data.photoCount ? `Photos attached: ${data.photoCount}` : '',
+  ].filter((line) => line !== '').join('\n')
 
   return {
     subject: `${data.name || 'Customer'} — ${data.subject || 'New enquiry'}`,
