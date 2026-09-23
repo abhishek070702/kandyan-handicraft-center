@@ -1,11 +1,4 @@
-import { COMPANY_PHONES, SHOP_EMAIL } from '../../src/utils/whatsapp.js'
-
-const GOLD = '#d4af37'
-const SOFT = '#f3d27a'
-const INK = '#f6efe2'
-const MUTED = '#c8c2b8'
-const CARD = '#071614'
-const PAGE = '#050505'
+import { SHOP_ADDRESS } from '../../src/utils/whatsapp.js'
 
 export function escapeHtml(value) {
   return String(value ?? '')
@@ -19,98 +12,11 @@ function siteOrigin() {
   return (process.env.URL || 'https://kandyan-handicraft-center.netlify.app').replace(/\/$/, '')
 }
 
-function phoneLine() {
-  return COMPANY_PHONES.map((phone) => phone.display).join('  ·  ')
-}
-
 function previewBlock(preview) {
   const text = escapeHtml(String(preview || '').replace(/\s+/g, ' ').trim())
   if (!text) return ''
   const pad = '&nbsp;&zwnj;'.repeat(90)
   return `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${text}${pad}</div>`
-}
-
-function shell({ eyebrow, title, intro, inner, preview }) {
-  const logo = `${siteOrigin()}/images/logo-elephant.png`
-
-  return `<!DOCTYPE html>
-<html lang="en">
-  <body style="margin:0;padding:0;background:${PAGE};">
-    ${previewBlock(preview)}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${PAGE};padding:28px 12px;">
-      <tr>
-        <td align="center">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:${CARD};border:1px solid rgba(212,175,55,0.45);border-radius:22px;overflow:hidden;">
-            <tr>
-              <td style="height:4px;background:${GOLD};font-size:0;line-height:0;">&nbsp;</td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:32px 28px 8px;">
-                <img src="${logo}" width="64" height="64" alt="" style="display:block;border:0;width:64px;height:64px;" />
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:8px 28px 0;font-family:Georgia,'Times New Roman',serif;font-size:28px;line-height:1;letter-spacing:0.14em;color:${SOFT};">
-                KANDYAN
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:6px 28px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.22em;color:${GOLD};">
-                HANDICRAFT CENTER
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:18px 28px 0;">
-                <div style="width:72px;height:1px;background:${GOLD};"></div>
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:16px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:${GOLD};">
-                ${eyebrow}
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:10px 32px 0;font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.2;color:${SOFT};">
-                ${title}
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:14px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:${MUTED};text-align:center;">
-                ${intro}
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:22px 24px 8px;">
-                ${inner}
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:8px 28px 28px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:${MUTED};">
-                ${escapeHtml(phoneLine())}<br />
-                <a href="mailto:${SHOP_EMAIL}" style="color:${SOFT};text-decoration:none;">${SHOP_EMAIL}</a>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>`
-}
-
-function detailRow(label, value) {
-  return `<tr>
-    <td style="padding:12px 16px;border-bottom:1px solid rgba(212,175,55,0.18);">
-      <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:${GOLD};">${label}</div>
-      <div style="margin-top:4px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:${INK};">${value}</div>
-    </td>
-  </tr>`
-}
-
-function detailTable(rows) {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#04110f;border:1px solid rgba(212,175,55,0.28);border-radius:16px;">
-    ${rows}
-  </table>`
 }
 
 function messageHtml(message) {
@@ -236,30 +142,91 @@ export function customerReceiptMail(data) {
   const name = escapeHtml(data.name || 'there')
   const subject = escapeHtml(data.subject || 'Your enquiry')
   const message = messageHtml(data.message || '')
+  const logo = `${siteOrigin()}/images/logo-elephant.png`
+  const collections = `${siteOrigin()}/collections`
+  const preview = 'We have received your jewellery inquiry and will get back to you shortly.'
+  const photos = Number(data.photoCount) || 0
+  const photoLine =
+    photos === 1
+      ? '<p style="margin:7px 0;font-size:14px;color:#333333;"><strong>Photos:</strong> 1 photo was attached.</p>'
+      : photos > 1
+        ? `<p style="margin:7px 0;font-size:14px;color:#333333;"><strong>Photos:</strong> ${photos} photos were attached.</p>`
+        : ''
 
-  const html = shell({
-    eyebrow: 'Message received',
-    title: `Thank you, ${name}`,
-    intro: 'Your note has reached Kandyan Handicraft Center. We will reply to this email.',
-    preview: `We received your message about ${data.subject || 'your enquiry'} and will reply to this email.`,
-    inner: detailTable(detailRow('Subject', subject) + detailRow('Your message', message)),
-  })
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kandyan Handicraft Center</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f1e8;font-family:Arial,Helvetica,sans-serif;">
+${previewBlock(preview)}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f5f1e8;padding:30px 10px;">
+<tr>
+<td align="center">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;">
+<tr>
+<td align="center" style="background:#0b0b0b;padding:35px 20px;border-bottom:3px solid #d4af37;">
+<img src="${logo}" alt="" width="95" height="95" style="display:block;margin:auto;border:0;width:95px;height:95px;" />
+<h1 style="color:#d4af37;margin:18px 0 5px;font-size:26px;font-family:Georgia,serif;font-weight:500;letter-spacing:1px;">Kandyan Handicraft Center</h1>
+<p style="color:#d9d9d9;margin:0;font-size:13px;letter-spacing:2px;">CRAFTED THROUGH GENERATIONS</p>
+</td>
+</tr>
+<tr>
+<td style="padding:38px 35px;">
+<p style="margin:0 0 16px;color:#333333;font-size:16px;">Hello <strong>${name}</strong>,</p>
+<h2 style="color:#1b1b1b;font-family:Georgia,serif;font-size:25px;margin:0 0 15px;">Thank You for Contacting Us</h2>
+<p style="color:#666666;font-size:15px;line-height:1.7;margin:0 0 25px;">We have received your jewellery inquiry. Our team at Kandyan Handicraft Center will review your request and get back to you shortly.</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#faf7ef;border:1px solid #eadfbf;border-radius:10px;margin-bottom:30px;">
+<tr>
+<td style="padding:22px;">
+<p style="margin:0 0 15px;color:#b58a24;font-size:12px;font-weight:bold;letter-spacing:2px;">YOUR INQUIRY</p>
+<p style="margin:7px 0;font-size:14px;color:#333333;"><strong>Subject:</strong> ${subject}</p>
+<p style="margin:7px 0;font-size:14px;color:#333333;"><strong>Message:</strong> ${message}</p>
+${photoLine}
+</td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+<td align="center" style="background:#d4af37;border-radius:6px;">
+<a href="${collections}" style="display:inline-block;padding:14px 28px;color:#111111;text-decoration:none;font-size:14px;font-weight:bold;letter-spacing:1px;">VIEW OUR COLLECTIONS</a>
+</td>
+</tr>
+</table>
+<p style="text-align:center;color:#777777;margin:35px 0 0;font-size:14px;">Need assistance? Reply to this email and we'll be happy to help.</p>
+</td>
+</tr>
+<tr>
+<td align="center" style="background:#111111;padding:30px 20px;">
+<p style="color:#d4af37;margin:0 0 8px;font-family:Georgia,serif;font-size:16px;">Crafted through generations.</p>
+<p style="color:#d4af37;margin:0 0 20px;font-family:Georgia,serif;font-size:16px;">Created especially for you.</p>
+<p style="color:#aaaaaa;font-size:12px;line-height:1.7;margin:0;">Kandyan Handicraft Center<br />${escapeHtml(SHOP_ADDRESS)}<br />Gold • Silver • Gems • Traditional Jewellery</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>`
 
   const text = [
-    `We received your message about ${data.subject || 'your enquiry'} and will reply to this email.`,
+    preview,
     '',
-    `Thank you, ${data.name || ''}`,
+    `Hello ${data.name || ''},`,
     '',
     `Subject: ${data.subject || ''}`,
     '',
     data.message || '',
     '',
-    phoneLine(),
-    SHOP_EMAIL,
+    SHOP_ADDRESS,
+    collections,
   ].join('\n')
 
   return {
-    subject: `We received your message — Kandyan Handicraft Center`,
+    subject: 'Thank You for Contacting Us — Kandyan Handicraft Center',
     html,
     text,
   }
