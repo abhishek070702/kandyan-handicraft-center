@@ -8,7 +8,7 @@ const sections = [
   },
   {
     title: 'Contact Form',
-    body: 'If you send a message through our Contact Us page, we collect the details you enter: your name, email address, phone number, subject, product, material, category, and message. You may also optionally attach up to three photos (for example a design idea, sample, or old jewellery piece). These submissions are received through Netlify Forms so we can review your enquiry and reply to the email address you provide.',
+    body: 'If you send a message through our Contact Us page, we collect the details you enter: your name, email address, subject, and message. You may also optionally attach up to three photos (for example a design idea, sample, or old jewellery piece). These submissions are received through Netlify Forms so we can review your enquiry and reply to the email address you provide.',
   },
   {
     title: 'How We Use This Information',
