@@ -8,7 +8,7 @@ import GemDetail from '../pages/Gems/GemDetail'
 import Gallery from '../pages/Gallery/Gallery'
 import About from '../pages/About/About'
 import Contact from '../pages/Contact/Contact'
-import Reply from '../pages/Reply/Reply'
+import Admin from '../pages/Admin/Admin'
 import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy'
 import TermsConditions from '../pages/TermsConditions/TermsConditions'
 import NotFound from '../pages/NotFound/NotFound'
@@ -26,7 +26,7 @@ function AppRoutes() {
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/shop-reply" element={<Reply />} />
+      <Route path="/admin" element={<Admin />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-and-conditions" element={<TermsConditions />} />
       <Route path="*" element={<NotFound />} />

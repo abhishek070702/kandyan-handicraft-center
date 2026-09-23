@@ -1,19 +1,14 @@
 import nodemailer from 'nodemailer'
 import { SHOP_EMAIL } from '../../src/utils/whatsapp.js'
-import { shopReplyMail } from '../lib/jewellery-mail.js'
+import { json, requireAdmin } from '../lib/admin-auth.js'
+import { readMessage, writeMessage } from '../lib/enquiries.js'
 
-function isEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim())
-}
-
-function json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'content-type': 'application/json; charset=utf-8',
-      'cache-control': 'no-store',
-    },
-  })
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 function createTransport(user, pass, port) {
@@ -55,10 +50,12 @@ export default async function sendReply(request) {
     return json({ ok: false, error: 'Method not allowed.' }, 405)
   }
 
+  const denied = requireAdmin(request)
+  if (denied) return denied
+
   const user = process.env.GMAIL_USER
   const pass = process.env.GMAIL_APP_PASSWORD
-  const replyCode = process.env.SHOP_REPLY_CODE
-  if (!user || !pass || !replyCode) {
+  if (!user || !pass) {
     return json({ ok: false, error: 'Replies cannot be sent right now.' }, 500)
   }
 
@@ -69,34 +66,34 @@ export default async function sendReply(request) {
     return json({ ok: false, error: 'Could not read the reply.' }, 400)
   }
 
-  if (String(form.get('code') || '') !== replyCode) {
-    return json({ ok: false, error: 'The reply code is not correct.' }, 401)
-  }
+  const id = String(form.get('id') || '').trim()
+  const reply = String(form.get('reply') || '').trim()
+  if (!reply) return json({ ok: false, error: 'Write a reply first.' }, 400)
 
-  const fields = {
-    name: String(form.get('name') || '').trim(),
-    email: String(form.get('email') || '').trim(),
-    reply: String(form.get('reply') || '').trim(),
-  }
+  const message = await readMessage(id)
+  if (!message) return json({ ok: false, error: 'That message was not found.' }, 404)
 
-  if (!fields.name || !fields.reply || !isEmail(fields.email)) {
-    return json({ ok: false, error: 'Enter the customer name, email, and your reply.' }, 400)
-  }
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:16px;line-height:1.7;">
+<p style="margin:0;">${escapeHtml(reply).replace(/\n/g, '<br />')}</p>
+</div>`
 
-  const mail = shopReplyMail(fields)
   try {
     await sendOne(user, pass, {
       from: `Kandyan Handicraft Center <${user}>`,
-      to: fields.email,
+      to: message.email,
       replyTo: SHOP_EMAIL,
-      subject: mail.subject,
-      html: mail.html,
-      text: mail.text,
+      subject: `Re: ${message.subject}`,
+      text: reply,
+      html,
     })
   } catch (error) {
     console.error('Shop reply failed', error)
     return json({ ok: false, error: 'The reply could not be sent. Please try again.' }, 502)
   }
 
-  return json({ ok: true })
+  message.replies = Array.isArray(message.replies) ? message.replies : []
+  message.replies.push({ text: reply, sentAt: new Date().toISOString() })
+  await writeMessage(message)
+
+  return json({ ok: true, message })
 }
