@@ -410,7 +410,7 @@ function Contact() {
                 <div>
                   <h3>Opening Hours</h3>
                   <p>Mon - Sat: 9.00 AM - 6.00 PM</p>
-                  <p>Sunday: Closed</p>
+                  <p>Sunday: 9.00 AM - 12.00 PM</p>
                 </div>
               </div>
             </div>

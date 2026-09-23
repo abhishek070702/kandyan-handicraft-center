@@ -53,6 +53,7 @@ function Footer() {
             <a href={`mailto:${SHOP_EMAIL}`}>{SHOP_EMAIL}</a>
           </p>
           <p>Mon - Sat: 9.00 AM - 6.00 PM</p>
+          <p>Sunday: 9.00 AM - 12.00 PM</p>
         </div>
 
         <div className="footer__newsletter">
