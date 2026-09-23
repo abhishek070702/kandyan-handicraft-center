@@ -195,6 +195,7 @@ function Contact() {
 
       <section className="contact-content">
         <div className="container contact-grid">
+          <div className="contact-main">
           <div className="contact-intro">
             <p className="contact-section__eyebrow">Visit Our Store</p>
             <h2>We Would Love to Hear From You</h2>
@@ -309,6 +310,7 @@ function Contact() {
               </p>
             )}
           </form>
+          </div>
 
           <div className="contact-info">
             <div className="contact-info__cards">
