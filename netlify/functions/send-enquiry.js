@@ -148,7 +148,7 @@ export default async function sendEnquiry(request) {
     await sendOne(user, pass, {
       from: senderName ? `"${senderName}" <${user}>` : fromShop,
       to: SHOP_EMAIL,
-      replyTo: fields.email,
+      replyTo: senderName ? `"${senderName}" <${fields.email}>` : fields.email,
       subject: shopMail.subject,
       html: shopMail.html,
       text: shopMail.text,

@@ -55,7 +55,11 @@ export default {
       await sendMail(transporter, {
         from: fromCustomer,
         to: SHOP_EMAIL,
-        replyTo: isEmail(fields.email) ? fields.email : undefined,
+        replyTo: isEmail(fields.email)
+          ? senderName
+            ? `"${senderName}" <${fields.email}>`
+            : fields.email
+          : undefined,
         subject: shopMail.subject,
         html: shopMail.html,
         text: shopMail.text,
