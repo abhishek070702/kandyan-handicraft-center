@@ -8,7 +8,7 @@ const sections = [
   },
   {
     title: 'How You Can Reach Us',
-    body: 'You can call, WhatsApp, or email us. If you send a message through the Contact Us form, we keep the name, email address, subject, message, and any photos you attach so we can reply to you. The website does not ask visitors to create an account.',
+    body: 'You can call, WhatsApp, or email us. If you send a message through the Contact Us form, we keep your name, email address, jewellery category, what you would like made, and any photos or video you attach so we can reply to you. The website does not ask visitors to create an account.',
   },
   {
     title: 'How We Use This Information',

@@ -1,7 +1,9 @@
 import { json } from '../lib/admin-auth.js'
-import { enquiryStore, photoKey, writeMessage } from '../lib/enquiries.js'
+import { enquiryStore, photoKey, videoKey, writeMessage } from '../lib/enquiries.js'
+import { ENQUIRY_CATEGORIES } from '../../src/data/enquiryCategories.js'
 
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024
+const MAX_VIDEO_BYTES = 4 * 1024 * 1024
 
 function isEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim())
@@ -26,6 +28,21 @@ async function readPhotos(form) {
   return photos
 }
 
+async function readVideo(form) {
+  const value = form.get('video')
+  if (!value || typeof value === 'string' || !value.size) return null
+  if (value.size > MAX_VIDEO_BYTES) {
+    throw new Error('The video must be 4 MB or smaller.')
+  }
+  if (value.type && !value.type.startsWith('video/')) {
+    throw new Error('Only a video file can be attached there.')
+  }
+  return {
+    contentType: value.type || 'video/mp4',
+    bytes: new Uint8Array(await value.arrayBuffer()),
+  }
+}
+
 export default async function saveEnquiry(request) {
   if (request.method !== 'POST') {
     return json({ ok: false, error: 'Method not allowed.' }, 405)
@@ -42,20 +59,29 @@ export default async function saveEnquiry(request) {
     return json({ ok: true })
   }
 
+  const category = String(form.get('category') || '').trim()
+  const product = String(form.get('product') || '').trim()
   const fields = {
     name: String(form.get('name') || '').trim(),
     email: String(form.get('email') || '').trim(),
-    subject: String(form.get('subject') || '').trim(),
-    message: String(form.get('message') || '').trim(),
+    category,
+    product,
+    subject: category || 'Enquiry',
+    message: product,
   }
 
-  if (!fields.name || !fields.subject || !fields.message || !isEmail(fields.email)) {
-    return json({ ok: false, error: 'Please fill in your name, email, subject, and message.' }, 400)
+  if (!fields.name || !isEmail(fields.email) || !ENQUIRY_CATEGORIES.includes(category) || !product) {
+    return json(
+      { ok: false, error: 'Please fill in your name, email, category, and what you would like made.' },
+      400,
+    )
   }
 
   let photos
+  let video
   try {
     photos = await readPhotos(form)
+    video = await readVideo(form)
   } catch (error) {
     return json(
       { ok: false, error: error instanceof Error ? error.message : 'Could not attach the photos.' },
@@ -69,6 +95,7 @@ export default async function saveEnquiry(request) {
     ...fields,
     createdAt: new Date().toISOString(),
     photoCount: photos.length,
+    hasVideo: Boolean(video),
     replies: [],
   }
 
@@ -81,6 +108,11 @@ export default async function saveEnquiry(request) {
         }),
       ),
     )
+    if (video) {
+      await store.set(videoKey(id), video.bytes, {
+        metadata: { contentType: video.contentType },
+      })
+    }
     await writeMessage(message)
   } catch (error) {
     console.error('Could not save enquiry', error)

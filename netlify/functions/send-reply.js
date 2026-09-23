@@ -1,9 +1,10 @@
 import nodemailer from 'nodemailer'
 import { SHOP_EMAIL } from '../../src/utils/whatsapp.js'
 import { json, requireAdmin } from '../lib/admin-auth.js'
-import { enquiryStore, readMessage, replyPhotoKey, writeMessage } from '../lib/enquiries.js'
+import { enquiryStore, readMessage, replyPhotoKey, replyVideoKey, writeMessage } from '../lib/enquiries.js'
 
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024
+const MAX_VIDEO_BYTES = 4 * 1024 * 1024
 
 async function readPhotos(form) {
   const photos = []
@@ -24,6 +25,28 @@ async function readPhotos(form) {
     })
   }
   return photos
+}
+
+async function readVideo(form) {
+  const value = form.get('video')
+  if (!value || typeof value === 'string' || !value.size) return null
+  if (value.size > MAX_VIDEO_BYTES) {
+    throw new Error('The video must be 4 MB or smaller.')
+  }
+  if (value.type && !value.type.startsWith('video/')) {
+    throw new Error('Only a video file can be attached there.')
+  }
+  const bytes = Buffer.from(await value.arrayBuffer())
+  const cleaned = String(value.name || '')
+    .replace(/[^\w.\- ]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+  return {
+    filename: /\.(mp4|webm|mov|m4v)$/i.test(cleaned) ? cleaned : 'video.mp4',
+    content: bytes,
+    contentType: value.type || 'video/mp4',
+  }
 }
 
 function safeFilename(name, index, type) {
@@ -104,22 +127,24 @@ export default async function sendReply(request) {
   const id = String(form.get('id') || '').trim()
   const reply = String(form.get('reply') || '').trim()
   let photos
+  let video
   try {
     photos = await readPhotos(form)
+    video = await readVideo(form)
   } catch (error) {
     return json(
-      { ok: false, error: error instanceof Error ? error.message : 'Could not attach the photos.' },
+      { ok: false, error: error instanceof Error ? error.message : 'Could not attach the files.' },
       400,
     )
   }
-  if (!reply && photos.length === 0) {
-    return json({ ok: false, error: 'Write a reply or add a photo.' }, 400)
+  if (!reply && photos.length === 0 && !video) {
+    return json({ ok: false, error: 'Write a reply or add a photo or video.' }, 400)
   }
 
   const message = await readMessage(id)
   if (!message) return json({ ok: false, error: 'That message was not found.' }, 404)
 
-  const text = reply || 'Please see the attached photos.'
+  const text = reply || (video ? 'Please see the attached video.' : 'Please see the attached photos.')
   const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:16px;line-height:1.7;">
 <p style="margin:0;">${escapeHtml(text).replace(/\n/g, '<br />')}</p>
 </div>`
@@ -129,14 +154,19 @@ export default async function sendReply(request) {
       from: `Kandyan Handicraft Center <${user}>`,
       to: message.email,
       replyTo: SHOP_EMAIL,
-      subject: `Re: ${message.subject}`,
+      subject: `Re: ${message.category || message.subject}`,
       text,
       html,
-      attachments: photos.map((photo) => ({
-        filename: photo.filename,
-        content: photo.content,
-        contentType: photo.contentType,
-      })),
+      attachments: [
+        ...photos.map((photo) => ({
+          filename: photo.filename,
+          content: photo.content,
+          contentType: photo.contentType,
+        })),
+        ...(video
+          ? [{ filename: video.filename, content: video.content, contentType: video.contentType }]
+          : []),
+      ],
     })
   } catch (error) {
     console.error('Shop reply failed', error)
@@ -153,10 +183,16 @@ export default async function sendReply(request) {
       }),
     ),
   )
+  if (video) {
+    await store.set(replyVideoKey(id, replyIndex), video.content, {
+      metadata: { contentType: video.contentType },
+    })
+  }
   message.replies.push({
     text,
     sentAt: new Date().toISOString(),
     photoCount: photos.length,
+    hasVideo: Boolean(video),
   })
   await writeMessage(message)
 

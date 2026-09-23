@@ -18,6 +18,14 @@ export function replyPhotoKey(id, replyIndex, photoIndex) {
   return `reply/${id}/${replyIndex}/${photoIndex}`
 }
 
+export function videoKey(id) {
+  return `video/${id}`
+}
+
+export function replyVideoKey(id, replyIndex) {
+  return `reply-video/${id}/${replyIndex}`
+}
+
 export async function listMessages() {
   const store = enquiryStore()
   const { blobs } = await store.list({ prefix: PREFIX })

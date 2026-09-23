@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { COMPANY_PHONES, SHOP_ADDRESS, SHOP_EMAIL, getWhatsAppUrl } from '../../utils/whatsapp'
+import { ENQUIRY_CATEGORIES } from '../../data/enquiryCategories'
 import './Contact.css'
 
 const MAX_PHOTOS = 3
 const MAX_PHOTO_MB = 2
+const MAX_VIDEO_MB = 4
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`
@@ -20,12 +22,15 @@ function Contact() {
   const [status, setStatus] = useState('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const [photos, setPhotos] = useState([])
+  const [video, setVideo] = useState(null)
   const fileInputRef = useRef(null)
   const photoUrlsRef = useRef([])
+  const videoUrlRef = useRef('')
 
   useEffect(() => {
     return () => {
       photoUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
+      if (videoUrlRef.current) URL.revokeObjectURL(videoUrlRef.current)
     }
   }, [])
 
@@ -34,6 +39,12 @@ function Contact() {
     photoUrlsRef.current = []
     setPhotos([])
     if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const clearVideo = () => {
+    if (videoUrlRef.current) URL.revokeObjectURL(videoUrlRef.current)
+    videoUrlRef.current = ''
+    setVideo(null)
   }
 
   const handlePhotosChange = (event) => {
@@ -87,6 +98,30 @@ function Contact() {
     })
   }
 
+  const handleVideoChange = (event) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    if (!file.type.startsWith('video/')) {
+      setStatus('error')
+      setErrorMessage('Please choose a video file.')
+      return
+    }
+    if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+      setStatus('error')
+      setErrorMessage(`The video must be ${MAX_VIDEO_MB} MB or smaller.`)
+      return
+    }
+    clearVideo()
+    const previewUrl = URL.createObjectURL(file)
+    videoUrlRef.current = previewUrl
+    setVideo({ file, previewUrl })
+    if (status === 'error') {
+      setStatus('idle')
+      setErrorMessage('')
+    }
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     setStatus('sending')
@@ -98,16 +133,25 @@ function Contact() {
       return
     }
 
+    const photoBytes = photos.reduce((total, item) => total + item.file.size, 0)
+    const videoBytes = video?.file.size || 0
+    if (photoBytes + videoBytes > 5.5 * 1024 * 1024) {
+      setStatus('error')
+      setErrorMessage('Photos and video together must be under 5.5 MB.')
+      return
+    }
+
     const form = event.currentTarget
     const body = new FormData()
     body.append('bot-field', form.elements['bot-field']?.value || '')
     body.append('name', form.name.value.trim())
     body.append('email', form.email.value.trim())
-    body.append('subject', form.subject.value.trim())
-    body.append('message', form.message.value.trim())
+    body.append('category', form.category.value)
+    body.append('product', form.product.value.trim())
     photos.forEach((item, index) => {
       body.append(`photo-${index + 1}`, item.file, item.file.name)
     })
+    if (video) body.append('video', video.file, video.file.name)
 
     try {
       const response = await fetch('/.netlify/functions/save-enquiry', {
@@ -120,6 +164,7 @@ function Contact() {
       }
       form.reset()
       clearPhotos()
+      clearVideo()
       setStatus('sent')
     } catch (error) {
       setStatus('error')
@@ -178,14 +223,19 @@ function Contact() {
               </label>
             </div>
             <label className="contact-form__field">
-              <span className="contact-form__message-label">Subject</span>
-              <input type="text" name="subject" placeholder="Subject" required />
+              <span className="contact-form__message-label">Category</span>
+              <select name="category" defaultValue="" required>
+                <option value="">Choose a category</option>
+                {ENQUIRY_CATEGORIES.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
             </label>
             <label className="contact-form__message">
-              <span className="contact-form__message-label">Your Message</span>
+              <span className="contact-form__message-label">What would you like made?</span>
               <textarea
-                name="message"
-                placeholder="Describe your enquiry, custom design, or repair."
+                name="product"
+                placeholder="For example, a gold bracelet with a red stone."
                 rows="5"
                 required
               />
@@ -225,6 +275,24 @@ function Contact() {
                     </li>
                   ))}
                 </ul>
+              )}
+            </div>
+            <div className="contact-form__photos">
+              <div className="contact-form__photos-head">
+                <span className="contact-form__message-label">Attach a video</span>
+                <span className="contact-form__photos-hint">Optional · 1 video · max {MAX_VIDEO_MB} MB</span>
+              </div>
+              <label className="contact-form__photos-pick">
+                <input type="file" accept="video/*" onChange={handleVideoChange} />
+                <span>{video ? 'Change video' : 'Choose a video'}</span>
+              </label>
+              {video && (
+                <div className="contact-form__video">
+                  <video src={video.previewUrl} controls />
+                  <button type="button" onClick={clearVideo}>
+                    Remove video
+                  </button>
+                </div>
               )}
             </div>
             <button className="contact-form__submit" type="submit" disabled={status === 'sending'}>
