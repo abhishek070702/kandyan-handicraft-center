@@ -1,7 +1,42 @@
 import nodemailer from 'nodemailer'
 import { SHOP_EMAIL } from '../../src/utils/whatsapp.js'
 import { json, requireAdmin } from '../lib/admin-auth.js'
-import { readMessage, writeMessage } from '../lib/enquiries.js'
+import { enquiryStore, readMessage, replyPhotoKey, writeMessage } from '../lib/enquiries.js'
+
+const MAX_PHOTO_BYTES = 2 * 1024 * 1024
+
+async function readPhotos(form) {
+  const photos = []
+  for (const field of ['photo-1', 'photo-2', 'photo-3']) {
+    const value = form.get(field)
+    if (!value || typeof value === 'string' || !value.size) continue
+    if (value.size > MAX_PHOTO_BYTES) {
+      throw new Error('Each photo must be 2 MB or smaller.')
+    }
+    if (value.type && !value.type.startsWith('image/')) {
+      throw new Error('Only image files can be attached.')
+    }
+    const bytes = Buffer.from(await value.arrayBuffer())
+    photos.push({
+      filename: safeFilename(value.name, photos.length + 1, value.type),
+      content: bytes,
+      contentType: value.type || 'application/octet-stream',
+    })
+  }
+  return photos
+}
+
+function safeFilename(name, index, type) {
+  const cleaned = String(name || '')
+    .replace(/[^\w.\- ]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+  if (cleaned && /\.(jpe?g|png|webp|gif|heic)$/i.test(cleaned)) return cleaned
+  const ext =
+    type === 'image/png' ? 'png' : type === 'image/webp' ? 'webp' : type === 'image/gif' ? 'gif' : 'jpg'
+  return `photo-${index}.${ext}`
+}
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -68,13 +103,25 @@ export default async function sendReply(request) {
 
   const id = String(form.get('id') || '').trim()
   const reply = String(form.get('reply') || '').trim()
-  if (!reply) return json({ ok: false, error: 'Write a reply first.' }, 400)
+  let photos
+  try {
+    photos = await readPhotos(form)
+  } catch (error) {
+    return json(
+      { ok: false, error: error instanceof Error ? error.message : 'Could not attach the photos.' },
+      400,
+    )
+  }
+  if (!reply && photos.length === 0) {
+    return json({ ok: false, error: 'Write a reply or add a photo.' }, 400)
+  }
 
   const message = await readMessage(id)
   if (!message) return json({ ok: false, error: 'That message was not found.' }, 404)
 
+  const text = reply || 'Please see the attached photos.'
   const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:16px;line-height:1.7;">
-<p style="margin:0;">${escapeHtml(reply).replace(/\n/g, '<br />')}</p>
+<p style="margin:0;">${escapeHtml(text).replace(/\n/g, '<br />')}</p>
 </div>`
 
   try {
@@ -83,8 +130,13 @@ export default async function sendReply(request) {
       to: message.email,
       replyTo: SHOP_EMAIL,
       subject: `Re: ${message.subject}`,
-      text: reply,
+      text,
       html,
+      attachments: photos.map((photo) => ({
+        filename: photo.filename,
+        content: photo.content,
+        contentType: photo.contentType,
+      })),
     })
   } catch (error) {
     console.error('Shop reply failed', error)
@@ -92,7 +144,20 @@ export default async function sendReply(request) {
   }
 
   message.replies = Array.isArray(message.replies) ? message.replies : []
-  message.replies.push({ text: reply, sentAt: new Date().toISOString() })
+  const replyIndex = message.replies.length
+  const store = enquiryStore()
+  await Promise.all(
+    photos.map((photo, index) =>
+      store.set(replyPhotoKey(id, replyIndex, index), photo.content, {
+        metadata: { contentType: photo.contentType },
+      }),
+    ),
+  )
+  message.replies.push({
+    text,
+    sentAt: new Date().toISOString(),
+    photoCount: photos.length,
+  })
   await writeMessage(message)
 
   return json({ ok: true, message })

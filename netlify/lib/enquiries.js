@@ -14,6 +14,10 @@ export function photoKey(id, index) {
   return `photo/${id}/${index}`
 }
 
+export function replyPhotoKey(id, replyIndex, photoIndex) {
+  return `reply/${id}/${replyIndex}/${photoIndex}`
+}
+
 export async function listMessages() {
   const store = enquiryStore()
   const { blobs } = await store.list({ prefix: PREFIX })
