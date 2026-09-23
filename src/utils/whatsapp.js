@@ -2,6 +2,8 @@ export const WHATSAPP_NUMBER = '94779516105'
 
 export const SHOP_EMAIL = 'kandyanhandicraft@gmail.com'
 
+export const SHOP_ADDRESS = 'Castle Lane, Bogambara, Kandy, Sri Lanka'
+
 export const COMPANY_PHONES = [
   { display: '077 951 6105', tel: 'tel:+94779516105' },
   { display: '077 673 6509', tel: 'tel:+94776736509' },

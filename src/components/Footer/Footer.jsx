@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import {
   COMPANY_PHONES,
+  SHOP_ADDRESS,
   SHOP_EMAIL,
   getCustomOrderWhatsAppUrl,
   getWhatsAppUrl,
@@ -42,7 +43,7 @@ function Footer() {
 
         <div className="footer__contact">
           <h3>Contact Us</h3>
-          <p>No. 123, Kandy Road, Kandy, Sri Lanka</p>
+          <p>{SHOP_ADDRESS}</p>
           {COMPANY_PHONES.map((phone) => (
             <p key={phone.tel}>
               <a href={phone.tel}>{phone.display}</a>
@@ -81,7 +82,7 @@ function Footer() {
       </div>
 
       <div className="container footer__bottom">
-        <p>© 2026 Eryn Technologies. All Rights Reserved.</p>
+        <p>© 2026 Kandyan Handicraft Center. All Rights Reserved.</p>
         <div>
           <NavLink to="/privacy-policy">Privacy Policy</NavLink>
           <span>|</span>

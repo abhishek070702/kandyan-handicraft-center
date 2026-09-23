@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { COMPANY_PHONES, SHOP_EMAIL, getWhatsAppUrl } from '../../utils/whatsapp'
+import { COMPANY_PHONES, SHOP_ADDRESS, SHOP_EMAIL, getWhatsAppUrl } from '../../utils/whatsapp'
 import './Contact.css'
 
 const CONTACT_EMAIL = SHOP_EMAIL
@@ -327,7 +327,7 @@ function Contact() {
                 </span>
                 <div>
                   <h3>Address</h3>
-                  <p>No. 123, Kandy Road, Kandy, Sri Lanka</p>
+                  <p>{SHOP_ADDRESS}</p>
                 </div>
               </div>
 

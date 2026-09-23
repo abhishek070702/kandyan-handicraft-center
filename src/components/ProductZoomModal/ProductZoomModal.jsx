@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { getWhatsAppUrl } from '../../utils/whatsapp'
 import './ProductZoomModal.css'
 
 const genderLabels = {
@@ -139,7 +140,7 @@ function ProductZoomModal({ product, onClose }) {
 
   const openWhatsApp = () => {
     window.open(
-      `https://wa.me/94779516105?text=${encodeURIComponent(enquireText)}`,
+      getWhatsAppUrl(enquireText),
       '_blank',
       'noopener,noreferrer',
     )
