@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kandyanhandicraftcenter.lk/sitemap.xml
