@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.GITHUB_PAGES_PREVIEW === 'true'
+    ? '/kandyan-handicraft-center/'
+    : '/',
   plugins: [react()],
   server: {
     host: true,
