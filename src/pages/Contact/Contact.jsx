@@ -6,16 +6,12 @@ import './Contact.css'
 const MAX_PHOTOS = 3
 const MAX_PHOTO_MB = 2
 const MAX_VIDEO_MB = 4
+const SAVE_ENQUIRY_URL = 'https://ukdgyytjeeouctqzktxy.supabase.co/functions/v1/save-enquiry'
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
-function isLocalPreview() {
-  const host = window.location.hostname
-  return host === 'localhost' || host === '127.0.0.1' || host === '::1'
 }
 
 function Contact() {
@@ -127,12 +123,6 @@ function Contact() {
     setStatus('sending')
     setErrorMessage('')
 
-    if (isLocalPreview()) {
-      setStatus('error')
-      setErrorMessage('Messages are delivered from the live website. Please email us or use WhatsApp.')
-      return
-    }
-
     const photoBytes = photos.reduce((total, item) => total + item.file.size, 0)
     const videoBytes = video?.file.size || 0
     if (photoBytes + videoBytes > 5.5 * 1024 * 1024) {
@@ -146,6 +136,7 @@ function Contact() {
     body.append('bot-field', form.elements['bot-field']?.value || '')
     body.append('name', form.name.value.trim())
     body.append('email', form.email.value.trim())
+    body.append('phone', form.phone.value.trim())
     body.append('category', form.category.value)
     body.append('product', form.product.value.trim())
     photos.forEach((item, index) => {
@@ -154,13 +145,13 @@ function Contact() {
     if (video) body.append('video', video.file, video.file.name)
 
     try {
-      const response = await fetch('/.netlify/functions/save-enquiry', {
+      const response = await fetch(SAVE_ENQUIRY_URL, {
         method: 'POST',
         body,
       })
       const payload = await response.json().catch(() => null)
       if (!response.ok || !payload?.ok) {
-        throw new Error(payload?.error || 'Unable to send your message.')
+        throw new Error(payload?.error || 'Unable to send your enquiry.')
       }
       form.reset()
       clearPhotos()
@@ -188,7 +179,7 @@ function Contact() {
           <h1>Contact Us</h1>
           <span className="contact-hero__line" aria-hidden="true" />
           <p className="contact-hero__lead">
-            Enquiries, custom designs, repairs, and appointments.
+            Share your idea, inspiration, or jewellery reference with our team.
           </p>
         </div>
       </section>
@@ -196,120 +187,161 @@ function Contact() {
       <section className="contact-content">
         <div className="container contact-grid">
           <div className="contact-main">
-          <div className="contact-intro">
-            <p className="contact-section__eyebrow">Visit Our Store</p>
-            <h2>We Would Love to Hear From You</h2>
-            <p className="contact-intro__note">
-              Send a message here, or call, WhatsApp, or email us.
-            </p>
-          </div>
+            <div className="contact-intro">
+              <p className="contact-section__eyebrow">Custom Jewellery Enquiries</p>
+              <h2>Tell Us What You Would Like Made</h2>
+              <p className="contact-intro__note">
+                Describe your idea and attach reference photos or a short video. We will review your request and contact you by email.
+              </p>
+            </div>
 
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="bot-field"
-              tabIndex={-1}
-              autoComplete="off"
-              className="contact-form__honey"
-              aria-hidden="true"
-            />
-            <div className="contact-form__row">
-              <label className="contact-form__field">
-                <span className="contact-form__message-label">Your Name</span>
-                <input type="text" name="name" placeholder="Your Name" required autoComplete="name" />
-              </label>
-              <label className="contact-form__field">
-                <span className="contact-form__message-label">Your Email</span>
-                <input type="email" name="email" placeholder="Your Email" required autoComplete="email" />
-              </label>
-            </div>
-            <label className="contact-form__field">
-              <span className="contact-form__message-label">Category</span>
-              <select name="category" defaultValue="" required>
-                <option value="">Choose a category</option>
-                {ENQUIRY_CATEGORIES.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </label>
-            <label className="contact-form__message">
-              <span className="contact-form__message-label">What would you like made?</span>
-              <textarea
-                name="product"
-                placeholder="For example, a gold bracelet with a red stone."
-                rows="5"
-                required
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="bot-field"
+                tabIndex={-1}
+                autoComplete="off"
+                className="contact-form__honey"
+                aria-hidden="true"
               />
-            </label>
-            <div className="contact-form__photos">
-              <div className="contact-form__photos-head">
-                <span className="contact-form__message-label">Attach photos</span>
-                <span className="contact-form__photos-hint">
-                  Optional · up to {MAX_PHOTOS} images · max {MAX_PHOTO_MB} MB each
-                </span>
+
+              <div className="contact-form__row">
+                <label className="contact-form__field">
+                  <span className="contact-form__message-label">Your Name</span>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your full name"
+                    required
+                    autoComplete="name"
+                    maxLength={120}
+                  />
+                </label>
+                <label className="contact-form__field">
+                  <span className="contact-form__message-label">Your Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                    autoComplete="email"
+                    maxLength={320}
+                  />
+                </label>
               </div>
-              <label className="contact-form__photos-pick">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotosChange}
+
+              <div className="contact-form__row">
+                <label className="contact-form__field">
+                  <span className="contact-form__message-label">Phone / WhatsApp</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Optional"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    maxLength={40}
+                  />
+                </label>
+                <label className="contact-form__field">
+                  <span className="contact-form__message-label">Category</span>
+                  <select name="category" defaultValue="" required>
+                    <option value="">Choose a category</option>
+                    {ENQUIRY_CATEGORIES.map((item) => (
+                      <option key={item}>{item}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <label className="contact-form__message">
+                <span className="contact-form__message-label">Describe Your Jewellery Request</span>
+                <textarea
+                  name="product"
+                  placeholder="For example: I would like a gold ring similar to the attached design, with a red stone in the centre."
+                  rows="5"
+                  required
+                  maxLength={5000}
                 />
-                <span>Choose photos</span>
-                <span className="contact-form__photos-count">
-                  {photos.length}/{MAX_PHOTOS}
-                </span>
               </label>
-              {photos.length > 0 && (
-                <ul className="contact-form__photo-list">
-                  {photos.map((item) => (
-                    <li key={item.id}>
-                      <img src={item.previewUrl} alt="" />
-                      <div>
-                        <p>{item.file.name}</p>
-                        <span>{formatBytes(item.file.size)}</span>
-                      </div>
-                      <button type="button" onClick={() => removePhoto(item.id)} aria-label={`Remove ${item.file.name}`}>
-                        ×
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div className="contact-form__photos">
-              <div className="contact-form__photos-head">
-                <span className="contact-form__message-label">Attach a video</span>
-                <span className="contact-form__photos-hint">Optional · 1 video · max {MAX_VIDEO_MB} MB</span>
-              </div>
-              <label className="contact-form__photos-pick">
-                <input type="file" accept="video/*" onChange={handleVideoChange} />
-                <span>{video ? 'Change video' : 'Choose a video'}</span>
-              </label>
-              {video && (
-                <div className="contact-form__video">
-                  <video src={video.previewUrl} controls />
-                  <button type="button" onClick={clearVideo}>
-                    Remove video
-                  </button>
+
+              <div className="contact-form__photos">
+                <div className="contact-form__photos-head">
+                  <span className="contact-form__message-label">Reference Photos</span>
+                  <span className="contact-form__photos-hint">
+                    Optional · up to {MAX_PHOTOS} images · max {MAX_PHOTO_MB} MB each
+                  </span>
                 </div>
+                <label className="contact-form__photos-pick">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handlePhotosChange}
+                  />
+                  <span>Choose photos</span>
+                  <span className="contact-form__photos-count">
+                    {photos.length}/{MAX_PHOTOS}
+                  </span>
+                </label>
+                {photos.length > 0 && (
+                  <ul className="contact-form__photo-list">
+                    {photos.map((item) => (
+                      <li key={item.id}>
+                        <img src={item.previewUrl} alt="" />
+                        <div>
+                          <p>{item.file.name}</p>
+                          <span>{formatBytes(item.file.size)}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(item.id)}
+                          aria-label={`Remove ${item.file.name}`}
+                        >
+                          ×
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div className="contact-form__photos">
+                <div className="contact-form__photos-head">
+                  <span className="contact-form__message-label">Reference Video</span>
+                  <span className="contact-form__photos-hint">
+                    Optional · 1 video · max {MAX_VIDEO_MB} MB
+                  </span>
+                </div>
+                <label className="contact-form__photos-pick">
+                  <input type="file" accept="video/*" onChange={handleVideoChange} />
+                  <span>{video ? 'Change video' : 'Choose a video'}</span>
+                </label>
+                {video && (
+                  <div className="contact-form__video">
+                    <video src={video.previewUrl} controls />
+                    <button type="button" onClick={clearVideo}>
+                      Remove video
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <button className="contact-form__submit" type="submit" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Sending Enquiry…' : 'Send Jewellery Enquiry'}
+              </button>
+
+              {status === 'sent' && (
+                <p className="contact-form__success" role="status">
+                  Thank you. Your jewellery enquiry has been received. We will review it and contact you by email.
+                </p>
               )}
-            </div>
-            <button className="contact-form__submit" type="submit" disabled={status === 'sending'}>
-              {status === 'sending' ? 'Sending…' : 'Send Message'}
-            </button>
-            {status === 'sent' && (
-              <p className="contact-form__success" role="status">
-                Thank you. Your message has been sent. We will reply to your email.
-              </p>
-            )}
-            {status === 'error' && (
-              <p className="contact-form__error" role="alert">
-                {errorMessage} You can also email <a href={`mailto:${SHOP_EMAIL}`}>{SHOP_EMAIL}</a>.
-              </p>
-            )}
-          </form>
+              {status === 'error' && (
+                <p className="contact-form__error" role="alert">
+                  {errorMessage} You can also email <a href={`mailto:${SHOP_EMAIL}`}>{SHOP_EMAIL}</a>.
+                </p>
+              )}
+            </form>
           </div>
 
           <div className="contact-info">
