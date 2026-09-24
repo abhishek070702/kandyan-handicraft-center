@@ -179,8 +179,8 @@ function Home() {
               </h1>
 
               <p className="home__description">
-                Exquisite handcrafted jewellery inspired by Sri Lankan tradition,
-                designed for elegance that lasts forever.
+                Discover handcrafted jewellery from our jewellery and handicraft shop in Kandy,
+                Sri Lanka, inspired by Sri Lankan tradition and made for lasting elegance.
               </p>
 
               <div className="home__actions">
