@@ -49,6 +49,11 @@ const staticSeo = {
   },
 }
 
+function normalizePathname(pathname) {
+  if (!pathname || pathname === '/') return '/'
+  return pathname.replace(/\/+$/, '') || '/'
+}
+
 function titleFromSlug(slug) {
   return slug
     .split('-')
@@ -105,7 +110,8 @@ function getSeo(pathname) {
 
 function App() {
   const { pathname } = useLocation()
-  const isAdmin = pathname === '/admin'
+  const normalizedPathname = normalizePathname(pathname)
+  const isAdmin = normalizedPathname === '/admin'
 
   useEffect(() => {
     if (isAdmin) {
@@ -114,8 +120,8 @@ function App() {
       return
     }
 
-    const seo = getSeo(pathname)
-    const canonical = `${SITE_URL}${pathname === '/' ? '/' : pathname}`
+    const seo = getSeo(normalizedPathname)
+    const canonical = `${SITE_URL}${normalizedPathname === '/' ? '/' : normalizedPathname}`
 
     document.title = seo.title
     setMeta('description', seo.description)
@@ -126,7 +132,7 @@ function App() {
     setMeta('twitter:title', seo.title)
     setMeta('twitter:description', seo.description)
     setCanonical(canonical)
-  }, [isAdmin, pathname])
+  }, [isAdmin, normalizedPathname])
 
   return (
     <>
