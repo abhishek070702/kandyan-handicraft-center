@@ -19,13 +19,13 @@ const eras = [
   },
   {
     year: '1977',
-    title: 'Kandyan Handicraft Center Was Established',
+    title: 'Kandyan Handicraft Centre Was Established',
     name: 'Mr. D. C. M. Hemasiri',
-    aka: 'Founder of Kandyan Handicraft Center, Kandy',
+    aka: 'Founder of Kandyan Handicraft Centre, Kandy',
     image: '/images/about/hemasiri.png',
-    imageAlt: 'Mr. D. C. M. Hemasiri at Kandyan Handicraft Center',
+    imageAlt: 'Mr. D. C. M. Hemasiri at Kandyan Handicraft Centre',
     text: [
-      'In 1977, his son, Mr. D. C. M. Hemasiri, established Kandyan Handicraft Center in Kandy.',
+      'In 1977, his son, Mr. D. C. M. Hemasiri, established Kandyan Handicraft Centre in Kandy.',
       'The shop was opened at the same location where we continue to serve our customers today. Through dedication, skilled workmanship, and trusted customer relationships, he developed the business and introduced traditional Kandyan creations to customers from different countries.',
     ],
   },
@@ -45,12 +45,12 @@ const eras = [
     year: '1991',
     title: 'Continuing the Family Legacy',
     name: 'Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena',
-    aka: 'Managing and developing Kandyan Handicraft Center',
+    aka: 'Managing and developing Kandyan Handicraft Centre',
     image: '/images/about/jagath-chithrasena.png',
     imageAlt:
-      'Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena at Kandyan Handicraft Center',
+      'Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena at Kandyan Handicraft Centre',
     text: [
-      'Since 1991, Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena has continued to manage and develop Kandyan Handicraft Center.',
+      'Since 1991, Mr. D. C. M. Jagath Keerthi Dushmantha Chithrasena has continued to manage and develop Kandyan Handicraft Centre.',
       'By building strong relationships with both local and international customers, he further expanded the business while protecting the traditional knowledge, skills, and values inherited through generations.',
     ],
   },
@@ -124,7 +124,7 @@ function About() {
 
   return (
     <main className="about-page" ref={rootRef}>
-      <section className="about-cover" aria-label="About Kandyan Handicraft Center">
+      <section className="about-cover" aria-label="About Kandyan Handicraft Centre">
         <div className="about-cover__atmosphere" aria-hidden="true">
           <span className="about-cover__orb about-cover__orb--a" />
           <span className="about-cover__orb about-cover__orb--b" />
@@ -144,7 +144,7 @@ function About() {
 
           <h1>
             Kandyan Handicraft
-            <span>Center</span>
+            <span>Centre</span>
           </h1>
 
           <p className="about-cover__tagline">Crafted through generations</p>
@@ -220,7 +220,7 @@ function About() {
             <p>What We Create</p>
             <h2>Traditional soul. Contemporary grace.</h2>
             <p className="about-atelier__intro">
-              Today, Kandyan Handicraft Center creates a wide range of
+              Today, Kandyan Handicraft Centre creates a wide range of
               traditional and modern jewellery — each piece shaped with
               inherited skill and lasting beauty.
             </p>
