@@ -16,12 +16,12 @@ function Footer() {
           <NavLink to="/" className="footer__logo">
             <img
               src="/images/logo-elephant.png"
-              alt="Kandyan Handicraft Center"
+              alt="Kandyan Handicraft Centre"
               className="footer__logo-image"
             />
             <div>
               <h2>Kandyan</h2>
-              <p>Handicraft Center</p>
+              <p>Handicraft Centre</p>
             </div>
           </NavLink>
 
@@ -83,7 +83,7 @@ function Footer() {
       </div>
 
       <div className="container footer__bottom">
-        <p>© 2026 Kandyan Handicraft Center. All Rights Reserved.</p>
+        <p>© 2026 Kandyan Handicraft Centre. All Rights Reserved.</p>
         <div>
           <NavLink to="/privacy-policy">Privacy Policy</NavLink>
           <span>|</span>
