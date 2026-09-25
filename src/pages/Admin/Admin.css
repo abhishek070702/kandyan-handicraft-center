@@ -158,6 +158,46 @@
   margin-bottom: 18px;
 }
 
+.admin-inbox-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.admin-inbox-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #f3d27a;
+  padding: 10px 17px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-inbox-tabs button span {
+  min-width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.12);
+  font-size: 12px;
+}
+
+.admin-inbox-tabs button.is-active {
+  background: #d4af37;
+  color: #111;
+  border-color: #d4af37;
+}
+
+.admin-inbox-tabs button.is-active span {
+  background: rgba(0, 0, 0, 0.14);
+}
+
 .admin-search {
   display: grid;
   gap: 8px;
@@ -346,7 +386,12 @@
 .admin-sent {
   border-top: 1px solid rgba(212, 175, 55, 0.25);
   padding-top: 16px;
-  margin-bottom: 20px;
+  margin: 22px 0 20px;
+}
+
+.admin-sent > div {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
 }
 
 .admin-read form {
@@ -407,6 +452,36 @@
   cursor: pointer;
 }
 
+.admin-replied-actions {
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid rgba(255, 125, 125, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-replied-actions > p {
+  margin: 0 0 14px;
+  color: #b7b1a6;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.admin-replied-actions > button {
+  border: 1px solid rgba(255, 125, 125, 0.5);
+  border-radius: 999px;
+  background: transparent;
+  color: #ffb4b4;
+  padding: 11px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-replied-actions > button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 .admin-empty {
   color: #b7b1a6;
   line-height: 1.6;
@@ -438,5 +513,14 @@
 
   .admin-top {
     align-items: flex-start;
+  }
+
+  .admin-inbox-tabs {
+    width: 100%;
+  }
+
+  .admin-inbox-tabs button {
+    flex: 1;
+    justify-content: center;
   }
 }
