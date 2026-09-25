@@ -4,7 +4,7 @@ import '../PrivacyPolicy/PrivacyPolicy.css'
 const sections = [
   {
     title: 'About These Terms',
-    body: 'These Terms & Conditions apply when you use the Kandyan Handicraft Center website. By browsing or contacting us through this site, you agree to these terms. If you do not agree, please do not use the website.',
+    body: 'These Terms & Conditions apply when you use the Kandyan Handicraft Centre website. By browsing or contacting us through this site, you agree to these terms. If you do not agree, please do not use the website.',
   },
   {
     title: 'Our Website',
@@ -12,7 +12,7 @@ const sections = [
   },
   {
     title: 'Enquiries & Orders',
-    body: 'Purchases, custom designs, repairs, and appointments are arranged by contacting us — through our Contact Us form, WhatsApp, phone, or by visiting our store in Kandy. A website enquiry does not automatically confirm a sale. Availability, pricing, timelines, and materials are confirmed by Kandyan Handicraft Center before an order is accepted.',
+    body: 'Purchases, custom designs, repairs, and appointments are arranged by contacting us — through our Contact Us form, WhatsApp, phone, or by visiting our store in Kandy. A website enquiry does not automatically confirm a sale. Availability, pricing, timelines, and materials are confirmed by Kandyan Handicraft Centre before an order is accepted.',
   },
   {
     title: 'Prices & Metal Rates',
@@ -28,7 +28,7 @@ const sections = [
   },
   {
     title: 'Intellectual Property',
-    body: 'Website content — including text, photographs, logos, and design — belongs to Kandyan Handicraft Center or is used with permission. You may view it for personal information. You may not copy, republish, or use our content for commercial purposes without our written consent.',
+    body: 'Website content — including text, photographs, logos, and design — belongs to Kandyan Handicraft Centre or is used with permission. You may view it for personal information. You may not copy, republish, or use our content for commercial purposes without our written consent.',
   },
   {
     title: 'Third-Party Links & Services',
@@ -40,7 +40,7 @@ const sections = [
   },
   {
     title: 'Limitation of Liability',
-    body: 'To the fullest extent permitted by law, Kandyan Handicraft Center is not liable for any indirect or consequential loss arising from use of this website or reliance on information displayed online. For purchases and custom work, the agreed arrangement between you and our store will apply.',
+    body: 'To the fullest extent permitted by law, Kandyan Handicraft Centre is not liable for any indirect or consequential loss arising from use of this website or reliance on information displayed online. For purchases and custom work, the agreed arrangement between you and our store will apply.',
   },
   {
     title: 'Privacy',
@@ -64,13 +64,13 @@ function TermsConditions() {
 
         <div className="container privacy-hero__inner">
           <div className="privacy-hero__ornament" aria-hidden="true" />
-          <p className="privacy-hero__eyebrow">Kandyan Handicraft Center</p>
+          <p className="privacy-hero__eyebrow">Kandyan Handicraft Centre</p>
           <h1>Terms &amp; Conditions</h1>
           <p className="privacy-hero__lead">
             Clear guidelines for using our website and enquiring with us.
           </p>
           <span className="privacy-hero__rule" aria-hidden="true" />
-          <p className="privacy-hero__meta">Last updated: July 2026</p>
+          <p className="privacy-hero__meta">Last updated: September 2026</p>
         </div>
       </section>
 
@@ -78,7 +78,7 @@ function TermsConditions() {
         <div className="container privacy-body__wrap">
           <article className="privacy-intro">
             <p>
-              Welcome to Kandyan Handicraft Center. These Terms &amp; Conditions
+              Welcome to Kandyan Handicraft Centre. These Terms &amp; Conditions
               explain how our website works for browsing, enquiries, custom
               jewellery, and store communication — based on how we actually
               serve customers today.
