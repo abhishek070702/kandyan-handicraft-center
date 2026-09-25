@@ -64,12 +64,12 @@ function Navbar() {
         <NavLink to="/" className="navbar__logo">
           <img
             src="/images/logo-elephant.png"
-            alt="Kandyan Handicraft Center"
+            alt="Kandyan Handicraft Centre"
             className="navbar__logo-image"
           />
           <div>
             <span className="navbar__logo-title">Kandyan</span>
-            <p>Handicraft Center</p>
+            <p>Handicraft Centre</p>
           </div>
         </NavLink>
 
