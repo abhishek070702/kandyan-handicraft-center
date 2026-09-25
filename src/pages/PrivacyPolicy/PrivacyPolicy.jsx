@@ -24,7 +24,7 @@ const sections = [
   },
   {
     title: 'Hosting & Technical Data',
-    body: 'Our website is hosted on Netlify. Like most websites, normal hosting or network logs may exist for security and reliability. This is not used to build marketing profiles.',
+    body: 'Our website frontend is hosted using GitHub Pages, while enquiry information and uploaded media are processed and stored using Supabase. Like most online services, normal hosting or network logs may exist for security and reliability. We do not use this technical data to build advertising profiles.',
   },
   {
     title: 'Cookies & Browser Storage',
@@ -40,7 +40,7 @@ const sections = [
   },
   {
     title: 'Your Requests',
-    body: 'You may ask us to correct or remove personal information you have shared with us. Contact Kandyan Handicraft Center through our Contact Us page and we will help as reasonably possible.',
+    body: 'You may ask us to correct or remove personal information you have shared with us. Contact Kandyan Handicraft Centre through our Contact Us page and we will help as reasonably possible.',
   },
 ]
 
@@ -56,7 +56,7 @@ function PrivacyPolicy() {
 
         <div className="container privacy-hero__inner">
           <div className="privacy-hero__ornament" aria-hidden="true" />
-          <p className="privacy-hero__eyebrow">Kandyan Handicraft Center</p>
+          <p className="privacy-hero__eyebrow">Kandyan Handicraft Centre</p>
           <h1>Privacy Policy</h1>
           <p className="privacy-hero__lead">
             A clear record of what we collect — and what we do not.
@@ -70,7 +70,7 @@ function PrivacyPolicy() {
         <div className="container privacy-body__wrap">
           <article className="privacy-intro">
             <p>
-              Kandyan Handicraft Center respects your privacy. This policy
+              Kandyan Handicraft Centre respects your privacy. This policy
               describes our real website practices today: how information is
               collected when you email, WhatsApp, or call us — and how we
               use it only to serve your jewellery enquiry.
@@ -96,7 +96,7 @@ function PrivacyPolicy() {
             <p className="privacy-cta__eyebrow">Privacy questions</p>
             <h2>Speak with us directly</h2>
             <p>
-              For privacy-related questions, contact Kandyan Handicraft Center
+              For privacy-related questions, contact Kandyan Handicraft Centre
               through our Contact Us page.
             </p>
             <Link to="/contact" className="privacy-cta__btn">
