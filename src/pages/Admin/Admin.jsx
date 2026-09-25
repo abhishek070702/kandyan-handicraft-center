@@ -39,9 +39,14 @@ function Admin() {
   const photoUrlsRef = useRef([])
   const videoUrlRef = useRef('')
 
+  const pendingMessages = useMemo(
+    () => messages.filter((item) => item.status !== 'replied'),
+    [messages],
+  )
+
   const filtered = useMemo(() => {
     const words = query.trim().toLowerCase()
-    return messages.filter((item) => {
+    return pendingMessages.filter((item) => {
       const category = item.category || ''
       if (categoryFilter !== 'All' && category.toLowerCase() !== categoryFilter.toLowerCase()) return false
       if (!words) return true
@@ -50,7 +55,7 @@ function Admin() {
         .toLowerCase()
         .includes(words)
     })
-  }, [messages, query, categoryFilter])
+  }, [pendingMessages, query, categoryFilter])
 
   const selected = filtered.find((item) => item.id === selectedId) || filtered[0] || null
 
@@ -167,7 +172,7 @@ function Admin() {
 
     setAuthed(true)
     setMessages(payload.messages || [])
-    setSelectedId((current) => current || payload.messages?.[0]?.id || '')
+    setSelectedId((current) => current || payload.messages?.find((item) => item.status !== 'replied')?.id || '')
     return true
   }
 
@@ -269,6 +274,7 @@ function Admin() {
 
       setReply('')
       clearAttachments()
+      setSelectedId('')
       await loadMessages(token)
       setStatus('sent')
     } catch (error) {
@@ -346,11 +352,11 @@ function Admin() {
 
           <div className="admin-layout">
             <ul className="admin-list">
-              {messages.length === 0 && (
-                <li className="admin-empty">No messages yet. New customer enquiries will appear here.</li>
+              {pendingMessages.length === 0 && (
+                <li className="admin-empty">All caught up. No unanswered customer enquiries.</li>
               )}
-              {messages.length > 0 && filtered.length === 0 && (
-                <li className="admin-empty">No messages match this search.</li>
+              {pendingMessages.length > 0 && filtered.length === 0 && (
+                <li className="admin-empty">No unanswered messages match this search.</li>
               )}
               {filtered.map((item) => (
                 <li key={item.id}>
@@ -490,7 +496,7 @@ function Admin() {
                   >
                     {status === 'sending' ? 'Sending…' : `Send branded reply to ${selected.name}`}
                   </button>
-                  {status === 'sent' && <p className="admin-ok">Reply sent successfully.</p>}
+                  {status === 'sent' && <p className="admin-ok">Reply sent successfully. The enquiry has been cleared from the inbox.</p>}
                   {status === 'error' && errorMessage && <p className="admin-error">{errorMessage}</p>}
                 </form>
               </article>
