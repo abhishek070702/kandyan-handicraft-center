@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://kandyanhandicraftcenter.lk/</loc>
-    <lastmod>2026-09-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://kandyanhandicraftcenter.lk/</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/rings</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/earrings</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/necklaces</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/bracelets</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/bangles</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/brooches</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/waist-chains</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/collections/pendants</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/gems</loc><lastmod>2026-09-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/gallery</loc><lastmod>2026-09-25</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/about</loc><lastmod>2026-09-25</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/contact</loc><lastmod>2026-09-25</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/privacy-policy</loc><lastmod>2026-09-25</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://kandyanhandicraftcenter.lk/terms-and-conditions</loc><lastmod>2026-09-25</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
