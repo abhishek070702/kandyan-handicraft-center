@@ -33,6 +33,31 @@ jobs:
       - name: Build for custom domain
         run: npm run build
 
+      - name: Create real HTML entry points for sitemap routes
+        run: |
+          node <<'NODE'
+          const fs = require('fs')
+          const path = require('path')
+
+          const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8')
+          const shell = fs.readFileSync('dist/index.html', 'utf8')
+          const routes = [...sitemap.matchAll(/<loc>https:\/\/kandyanhandicraftcenter\.lk([^<]*)<\/loc>/g)]
+            .map((match) => match[1] || '/')
+
+          for (const route of routes) {
+            if (route === '/') continue
+
+            const cleanRoute = route.replace(/^\/+|\/+$/g, '')
+            if (!cleanRoute) continue
+
+            const routeDir = path.join('dist', cleanRoute)
+            fs.mkdirSync(routeDir, { recursive: true })
+            fs.writeFileSync(path.join(routeDir, 'index.html'), shell)
+          }
+
+          console.log(`Created ${Math.max(routes.length - 1, 0)} static route entry points.`)
+          NODE
+
       - name: Add SPA fallback
         run: cp dist/index.html dist/404.html
 
