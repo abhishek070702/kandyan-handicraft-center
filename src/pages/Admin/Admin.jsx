@@ -387,7 +387,7 @@ function Admin() {
                 className={inboxView === 'still' ? 'is-active' : ''}
                 onClick={() => setInboxView('still')}
               >
-                Still <span>{stillMessages.length}</span>
+                Pending <span>{stillMessages.length} New</span>
               </button>
               <button
                 type="button"
@@ -421,7 +421,7 @@ function Admin() {
               {visibleMessages.length === 0 && (
                 <li className="admin-empty">
                   {inboxView === 'still'
-                    ? 'No enquiries waiting for a reply.'
+                    ? 'No pending enquiries.'
                     : 'No replied enquiries yet.'}
                 </li>
               )}
