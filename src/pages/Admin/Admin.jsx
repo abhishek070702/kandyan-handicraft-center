@@ -45,6 +45,11 @@ function Admin() {
     [messages],
   )
 
+  const newMessagesCount = useMemo(
+    () => stillMessages.filter((item) => item.status === 'new').length,
+    [stillMessages],
+  )
+
   const repliedMessages = useMemo(
     () => messages.filter((item) => item.status === 'replied'),
     [messages],
@@ -65,7 +70,7 @@ function Admin() {
     })
   }, [visibleMessages, query, categoryFilter])
 
-  const selected = filtered.find((item) => item.id === selectedId) || filtered[0] || null
+  const selected = filtered.find((item) => item.id === selectedId) || null
 
   const clearAttachments = () => {
     photoUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
@@ -248,6 +253,41 @@ function Admin() {
     setErrorMessage('')
   }
 
+  const openMessage = async (item) => {
+    setSelectedId(item.id)
+    setReply('')
+    clearAttachments()
+    setStatus('idle')
+    setErrorMessage('')
+
+    if (inboxView !== 'still' || item.status !== 'new') return
+
+    setMessages((current) => current.map((message) => (
+      message.id === item.id ? { ...message, status: 'read' } : message
+    )))
+
+    const token = getSessionToken()
+    if (!token) return
+
+    const body = new FormData()
+    body.append('id', item.id)
+
+    try {
+      const response = await fetch(`${FUNCTIONS_BASE}/mark-enquiry-read`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body,
+      })
+      const payload = await response.json().catch(() => null)
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || 'Could not mark the enquiry as read.')
+      }
+    } catch (error) {
+      await loadMessages(token).catch(() => null)
+      setErrorMessage(error instanceof Error ? error.message : 'Could not mark the enquiry as read.')
+    }
+  }
+
   const deleteRepliedEnquiry = async () => {
     if (!selected || selected.status !== 'replied') return
 
@@ -387,7 +427,7 @@ function Admin() {
                 className={inboxView === 'still' ? 'is-active' : ''}
                 onClick={() => setInboxView('still')}
               >
-                Pending <span>{stillMessages.length} New</span>
+                Inbox <span>{newMessagesCount} New</span>
               </button>
               <button
                 type="button"
@@ -421,7 +461,7 @@ function Admin() {
               {visibleMessages.length === 0 && (
                 <li className="admin-empty">
                   {inboxView === 'still'
-                    ? 'No pending enquiries.'
+                    ? 'No active enquiries.'
                     : 'No replied enquiries yet.'}
                 </li>
               )}
@@ -433,15 +473,14 @@ function Admin() {
                   <button
                     type="button"
                     className={item.id === selected?.id ? 'is-active' : ''}
-                    onClick={() => {
-                      setSelectedId(item.id)
-                      setReply('')
-                      clearAttachments()
-                      setStatus('idle')
-                      setErrorMessage('')
-                    }}
+                    onClick={() => openMessage(item)}
                   >
-                    <strong>{item.name}</strong>
+                    <strong>
+                      {item.name}
+                      {item.status === 'new' && (
+                        <span style={{ marginLeft: '8px', color: '#d4af37', fontSize: '10px', letterSpacing: '.08em' }}>NEW</span>
+                      )}
+                    </strong>
                     {item.category && <em>{item.category}</em>}
                     <span>{item.product || item.subject}</span>
                     <small>
