@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ENQUIRY_CATEGORIES } from '../../data/enquiryCategories'
 import './Admin.css'
 
+const FUNCTIONS_BASE = 'https://ukdgyytjeeouctqzktxy.supabase.co/functions/v1'
+const SESSION_KEY = 'khc-owner-session'
 const MAX_PHOTOS = 3
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024
 const MAX_VIDEO_BYTES = 4 * 1024 * 1024
@@ -16,6 +18,10 @@ function formatWhen(value) {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+function getSessionToken() {
+  return window.sessionStorage.getItem(SESSION_KEY) || ''
 }
 
 function Admin() {
@@ -46,10 +52,9 @@ function Admin() {
     })
   }, [messages, query, categoryFilter])
 
-  const visibleSelected = filtered.find((item) => item.id === selectedId) || filtered[0] || null
-  const selected = visibleSelected
+  const selected = filtered.find((item) => item.id === selectedId) || filtered[0] || null
 
-  const clearPhotos = () => {
+  const clearAttachments = () => {
     photoUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
     photoUrlsRef.current = []
     setPhotos([])
@@ -65,11 +70,21 @@ function Admin() {
     }
   }, [])
 
+  useEffect(() => {
+    document.title = 'Owner Messages | Kandyan Handicraft Centre'
+    const meta = document.createElement('meta')
+    meta.name = 'robots'
+    meta.content = 'noindex, nofollow, noarchive'
+    document.head.appendChild(meta)
+    return () => meta.remove()
+  }, [])
+
   const addPhotos = (event) => {
-    const selected = Array.from(event.target.files || [])
+    const selectedFiles = Array.from(event.target.files || [])
     const next = [...photos]
     let problem = ''
-    for (const file of selected) {
+
+    for (const file of selectedFiles) {
       if (next.length >= MAX_PHOTOS) {
         problem = 'You can add up to 3 photos.'
         break
@@ -86,6 +101,7 @@ function Admin() {
       photoUrlsRef.current.push(previewUrl)
       next.push({ file, previewUrl, id: `${file.name}-${file.size}-${file.lastModified}` })
     }
+
     setPhotos(next)
     setErrorMessage(problem)
     setStatus(problem ? 'error' : 'idle')
@@ -96,6 +112,7 @@ function Admin() {
     const file = event.target.files?.[0]
     event.target.value = ''
     if (!file) return
+
     if (!file.type.startsWith('video/')) {
       setStatus('error')
       setErrorMessage('Please choose a video file.')
@@ -106,6 +123,7 @@ function Admin() {
       setErrorMessage('The video must be 4 MB or smaller.')
       return
     }
+
     if (videoUrlRef.current) URL.revokeObjectURL(videoUrlRef.current)
     const previewUrl = URL.createObjectURL(file)
     videoUrlRef.current = previewUrl
@@ -125,28 +143,32 @@ function Admin() {
     })
   }
 
-  useEffect(() => {
-    const meta = document.createElement('meta')
-    meta.name = 'robots'
-    meta.content = 'noindex, nofollow'
-    document.head.appendChild(meta)
-    return () => meta.remove()
-  }, [])
-
-  const loadMessages = async () => {
-    const response = await fetch('/.netlify/functions/admin-messages', { credentials: 'include' })
-    const payload = await response.json().catch(() => null)
-    if (response.status === 401 || !payload) {
+  const loadMessages = async (token = getSessionToken()) => {
+    if (!token) {
       setAuthed(false)
       setMessages([])
-      return
+      return false
+    }
+
+    const response = await fetch(`${FUNCTIONS_BASE}/admin-messages`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const payload = await response.json().catch(() => null)
+
+    if (response.status === 401 || !payload) {
+      window.sessionStorage.removeItem(SESSION_KEY)
+      setAuthed(false)
+      setMessages([])
+      return false
     }
     if (!response.ok || !payload?.ok) {
       throw new Error(payload?.error || 'Could not load messages.')
     }
+
     setAuthed(true)
     setMessages(payload.messages || [])
     setSelectedId((current) => current || payload.messages?.[0]?.id || '')
+    return true
   }
 
   useEffect(() => {
@@ -162,41 +184,64 @@ function Admin() {
     const form = event.currentTarget
     setStatus('sending')
     setErrorMessage('')
+
     const body = new FormData()
     body.append('code', form.code.value)
+
     try {
-      const response = await fetch('/.netlify/functions/admin-login', {
+      const response = await fetch(`${FUNCTIONS_BASE}/admin-login`, {
         method: 'POST',
         body,
-        credentials: 'include',
       })
       const payload = await response.json().catch(() => null)
-      if (!response.ok || !payload?.ok) {
+      if (!response.ok || !payload?.ok || !payload?.token) {
         throw new Error(payload?.error || 'Could not sign in.')
       }
+
+      window.sessionStorage.setItem(SESSION_KEY, payload.token)
       form.reset()
-      await loadMessages()
+      await loadMessages(payload.token)
       setStatus('idle')
     } catch (error) {
+      window.sessionStorage.removeItem(SESSION_KEY)
       setStatus('error')
       setErrorMessage(error instanceof Error ? error.message : 'Could not sign in.')
     }
   }
 
   const signOut = async () => {
-    await fetch('/.netlify/functions/admin-logout', { method: 'POST', credentials: 'include' })
+    const token = getSessionToken()
+    if (token) {
+      await fetch(`${FUNCTIONS_BASE}/admin-logout`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => null)
+    }
+
+    window.sessionStorage.removeItem(SESSION_KEY)
     setAuthed(false)
     setMessages([])
     setSelectedId('')
     setReply('')
-    clearPhotos()
+    clearAttachments()
+    setStatus('idle')
+    setErrorMessage('')
   }
 
   const sendReply = async (event) => {
     event.preventDefault()
     if (!selected) return
+
+    const token = getSessionToken()
+    if (!token) {
+      setAuthed(false)
+      setErrorMessage('Your owner session has expired. Please sign in again.')
+      return
+    }
+
     setStatus('sending')
     setErrorMessage('')
+
     const body = new FormData()
     body.append('id', selected.id)
     body.append('reply', reply.trim())
@@ -204,21 +249,27 @@ function Admin() {
       body.append(`photo-${index + 1}`, item.file, item.file.name)
     })
     if (video) body.append('video', video.file, video.file.name)
+
     try {
-      const response = await fetch('/.netlify/functions/send-reply', {
+      const response = await fetch(`${FUNCTIONS_BASE}/send-reply`, {
         method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
         body,
-        credentials: 'include',
       })
       const payload = await response.json().catch(() => null)
+
+      if (response.status === 401) {
+        window.sessionStorage.removeItem(SESSION_KEY)
+        setAuthed(false)
+        throw new Error('Your owner session has expired. Please sign in again.')
+      }
       if (!response.ok || !payload?.ok) {
         throw new Error(payload?.error || 'The reply could not be sent.')
       }
+
       setReply('')
-      clearPhotos()
-      setMessages((current) =>
-        current.map((item) => (item.id === payload.message.id ? payload.message : item)),
-      )
+      clearAttachments()
+      await loadMessages(token)
       setStatus('sent')
     } catch (error) {
       setStatus('error')
@@ -234,11 +285,11 @@ function Admin() {
         <section className="admin-gate">
           <form className="admin-gate__card" onSubmit={signIn}>
             <img src="/images/logo-elephant.png" alt="" width="92" height="92" />
-            <p>Kandyan Handicraft Center</p>
-            <h1>Messages</h1>
+            <p>Kandyan Handicraft Centre</p>
+            <h1>Owner Messages</h1>
             <span className="admin-gate__line" />
             <label>
-              Password
+              Owner password
               <input type="password" name="code" required autoComplete="current-password" />
             </label>
             <button type="submit" disabled={status === 'sending'}>
@@ -254,8 +305,8 @@ function Admin() {
           <header className="admin-top">
             <img src="/images/logo-elephant.png" alt="" width="52" height="52" />
             <div>
-              <p>Kandyan Handicraft Center</p>
-              <h1>Messages</h1>
+              <p>Kandyan Handicraft Centre</p>
+              <h1>Owner Messages</h1>
             </div>
             <button type="button" onClick={signOut}>
               Sign out
@@ -269,7 +320,7 @@ function Admin() {
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search bracelet, ring, or a name"
+                placeholder="Search a customer, ring, bracelet…"
               />
             </label>
             <div className="admin-chips">
@@ -292,10 +343,11 @@ function Admin() {
               ))}
             </div>
           </div>
+
           <div className="admin-layout">
             <ul className="admin-list">
               {messages.length === 0 && (
-                <li className="admin-empty">No messages yet. New customer messages will appear here.</li>
+                <li className="admin-empty">No messages yet. New customer enquiries will appear here.</li>
               )}
               {messages.length > 0 && filtered.length === 0 && (
                 <li className="admin-empty">No messages match this search.</li>
@@ -308,7 +360,7 @@ function Admin() {
                     onClick={() => {
                       setSelectedId(item.id)
                       setReply('')
-                      clearPhotos()
+                      clearAttachments()
                       setStatus('idle')
                       setErrorMessage('')
                     }}
@@ -318,7 +370,7 @@ function Admin() {
                     <span>{item.product || item.subject}</span>
                     <small>
                       {formatWhen(item.createdAt)}
-                      {item.photoCount > 0 ? ' · Photo' : ''}
+                      {item.photoCount > 0 ? ` · ${item.photoCount} photo${item.photoCount > 1 ? 's' : ''}` : ''}
                       {item.hasVideo ? ' · Video' : ''}
                     </small>
                   </button>
@@ -329,74 +381,65 @@ function Admin() {
             {selected && (
               <article className="admin-read">
                 <p className="admin-read__meta">
-                  {selected.email}
+                  {selected.name} · {selected.email}
                   <br />
                   {formatWhen(selected.createdAt)}
                 </p>
                 <h2>{selected.category || selected.subject}</h2>
                 <p className="admin-read__message">{selected.product || selected.message}</p>
-                {selected.photoCount > 0 && (
+
+                {selected.photos?.length > 0 && (
                   <>
                     <p className="admin-label">Customer photos</p>
                     <div className="admin-photos">
-                      {Array.from({ length: selected.photoCount }, (_, index) => (
-                        <img
-                          key={index}
-                          src={`/.netlify/functions/admin-photo?id=${selected.id}&n=${index}`}
-                          alt=""
-                        />
+                      {selected.photos.map((item, index) => (
+                        <a key={`${item.url}-${index}`} href={item.url} target="_blank" rel="noreferrer">
+                          <img src={item.url} alt={item.fileName || 'Customer attachment'} />
+                        </a>
                       ))}
                     </div>
                   </>
                 )}
-                {selected.hasVideo && (
+
+                {selected.videoUrl && (
                   <>
                     <p className="admin-label">Customer video</p>
-                    <video
-                      className="admin-video"
-                      src={`/.netlify/functions/admin-video?id=${selected.id}`}
-                      controls
-                    />
+                    <video className="admin-video" src={selected.videoUrl} controls />
                   </>
                 )}
+
                 {selected.replies?.length > 0 && (
                   <div className="admin-sent">
-                    {selected.replies.map((item, replyIndex) => (
-                      <div key={item.sentAt}>
+                    {selected.replies.map((item) => (
+                      <div key={item.id || item.sentAt}>
                         <small>Sent {formatWhen(item.sentAt)}</small>
                         <p>{item.text}</p>
-                        {item.photoCount > 0 && (
+                        {item.photos?.length > 0 && (
                           <div className="admin-photos">
-                            {Array.from({ length: item.photoCount }, (_, index) => (
-                              <img
-                                key={index}
-                                src={`/.netlify/functions/admin-photo?id=${selected.id}&reply=${replyIndex}&n=${index}`}
-                                alt=""
-                              />
+                            {item.photos.map((photo, index) => (
+                              <a key={`${photo.url}-${index}`} href={photo.url} target="_blank" rel="noreferrer">
+                                <img src={photo.url} alt={photo.fileName || 'Reply attachment'} />
+                              </a>
                             ))}
                           </div>
                         )}
-                        {item.hasVideo && (
-                          <video
-                            className="admin-video"
-                            src={`/.netlify/functions/admin-video?id=${selected.id}&reply=${replyIndex}`}
-                            controls
-                          />
-                        )}
+                        {item.videoUrl && <video className="admin-video" src={item.videoUrl} controls />}
                       </div>
                     ))}
                   </div>
                 )}
+
                 <form onSubmit={sendReply}>
                   <label>
-                    Your reply
+                    Reply to {selected.name}
                     <textarea
                       value={reply}
                       onChange={(event) => setReply(event.target.value)}
                       rows="6"
-                      placeholder="Write a reply to the customer"
+                      placeholder="Type only your message. The Kandyan Handicraft Centre email design and signature are added automatically."
                     />
                   </label>
+
                   <div className="admin-attach">
                     <label className="admin-attach__pick">
                       <input type="file" accept="image/*" multiple onChange={addPhotos} />
@@ -406,10 +449,9 @@ function Admin() {
                       <input type="file" accept="video/*" onChange={addVideo} />
                       {video ? 'Change video' : 'Add video'}
                     </label>
-                    <span>
-                      {photos.length}/{MAX_PHOTOS}
-                    </span>
+                    <span>{photos.length}/{MAX_PHOTOS}</span>
                   </div>
+
                   {video && (
                     <div className="admin-video-pick">
                       <video className="admin-video" src={video.previewUrl} controls />
@@ -425,6 +467,7 @@ function Admin() {
                       </button>
                     </div>
                   )}
+
                   {photos.length > 0 && (
                     <div className="admin-photos">
                       {photos.map((item) => (
@@ -440,13 +483,14 @@ function Admin() {
                       ))}
                     </div>
                   )}
+
                   <button
                     type="submit"
                     disabled={status === 'sending' || (!reply.trim() && photos.length === 0 && !video)}
                   >
-                    {status === 'sending' ? 'Sending…' : 'Send to customer'}
+                    {status === 'sending' ? 'Sending…' : `Send branded reply to ${selected.name}`}
                   </button>
-                  {status === 'sent' && <p className="admin-ok">The reply has been sent.</p>}
+                  {status === 'sent' && <p className="admin-ok">Reply sent successfully.</p>}
                   {status === 'error' && errorMessage && <p className="admin-error">{errorMessage}</p>}
                 </form>
               </article>
